@@ -1,0 +1,159 @@
+\documentclass{bamboo}
+
+\Document{
+	\Title{Maximum Flow}
+	
+	\section{Max-Flow}
+	For each of the statements below select whether it is possible or not.
+    
+    In a residual graph $G$, we have two vertices $u$ and $v$ such that the sum of capacities on the edge from $u$ to $v$ and the edge from $v$ to $u$ is less than the initial capacity of the edge between $u$ and $v$. 
+    \Choices{
+        \Choice{Possible}
+        \Choice*{Impossible}
+    }
+
+    There can be an instance of max-flow where some of the outgoing edges from the source $S$ and some of the incoming edges to the sink $T$ are not used to their full capacity.
+    \Choices{
+        \Choice*{Possible}
+        \Choice{Impossible}
+    }
+
+    There exists a vertex $v$ other than the source and the sink where its incoming flow is less than its outgoing flow.
+    \Choices{
+        \Choice{Possible}
+        \Choice*{Impossible}
+    }
+
+	Suppose we have a graph with integer capacities. Can we always find a single edge and increase its capacity by $1$ to make sure the value of max-flow increases by $1$?
+    \Choices{
+        \Choice{Always possible}
+        \Choice*{Sometimes possible, and sometimes impossible}
+        \Choice{Always impossible}
+    }
+    
+    Suppose we have a graph with integer capacities and there is nonzero max-flow between a source and a sink vertex. We want to increase the capacity of some of the edges in order to increase the max-flow by $1$. Do we need to increase any edge's capacity by $2$ or more units?
+    \Choices{
+        \Choice*{Always possible while increasing edge capacities by at most $1$.}
+        \Choice{Sometimes impossible to increase max-flow by $1$ with only $1$-unit edge increments.}
+    }
+
+    \section{Max-Flow Example}
+    We start with a graph that has no incoming edges to the source $S$ and no outgoing edges from the sink $T$ and run a flow. The residual graph is pictured below: 
+    \Tikz*{
+    	\begin{scope}[every node/.style={circle, draw=Black, line width=1, fill=LightGray, inner sep=3}]
+			\node (S) at (-4.5, 0) {$S$};
+			\node (A) at (-1.5, 2) {$A$};
+			\node (B) at (-1.5, 0) {$B$};
+			\node (C) at (-1.5, -2) {$C$};
+			\node (D) at (1.5, 2) {$D$};
+			\node (E) at (1.5, 0) {$E$};
+			\node (F) at (1.5, -2) {$F$};
+			\node (T) at (4.5, 0) {$T$};
+		\end{scope}
+		\begin{scope}[line width=1, -stealth]
+			\foreach \u/\v/\w in {A/S/4, B/A/6, E/B/4, D/E/3, A/E/1, D/A/4, T/D/7, T/E/5, E/F/2, F/C/3, E/C/2, C/S/5}
+				\draw (\u) -- node[pos=0.5, fill=White] {$\w$} (\v);
+			\foreach \u/\v/\w in {S/B/5, B/S/4, F/T/2, T/F/1}
+				\draw (\u) to[bend left=20] node[pos=0.5, fill=White] {$\w$} (\v);
+		\end{scope}
+
+%		\foreach \u/\v/\w in {A/B/4, A/C/7, B/C/1, B/D/5, C/E/2, D/E/3, D/F/8, E/F/6}
+%			\draw[line width=1] (\u) -- node[pos=0.5, fill=White] {$\w$} (\v);
+    }
+    % https://q.uiver.app/?q=WzAsOCxbMCwyLCJcXGJ1bGxldHtTfSJdLFsyLDAsIlxcYnVsbGV0e0F9Il0sWzIsMiwiXFxidWxsZXR7Qn0iXSxbMiw0LCJcXGJ1bGxldHtDfSJdLFs0LDAsIlxcYnVsbGV0e0R9Il0sWzQsMiwiXFxidWxsZXR7RX0iXSxbNCw0LCJcXGJ1bGxldHtGfSJdLFs2LDIsIlxcYnVsbGV0e1R9Il0sWzcsNCwiNyIsMV0sWzcsNSwiNSIsMV0sWzYsNywiMiIsMSx7Im9mZnNldCI6LTJ9XSxbNyw2LCIxIiwxLHsib2Zmc2V0IjotMn1dLFs2LDMsIjMiLDEseyJvZmZzZXQiOjJ9XSxbMywwLCI1IiwxXSxbMiwxLCI2IiwxXSxbMSw1LCIxIiwxXSxbNSw2LCIyIiwxXSxbMSwwLCI0IiwxXSxbMCwyLCI1IiwxLHsib2Zmc2V0IjotMn1dLFs1LDIsIjQiLDFdLFs0LDUsIjMiLDFdLFs0LDEsIjQiLDFdLFs1LDMsIjIiLDFdLFsyLDAsIjQiLDEseyJvZmZzZXQiOi0yfV1d
+%\[\begin{tikzcd}[ampersand replacement=\&]
+%	\&\& {\bullet{A}} \&\& {\bullet{D}} \\
+%	\\
+%	{\bullet{S}} \&\& {\bullet{B}} \&\& {\bullet{E}} \&\& {\bullet{T}} \\
+%	\\
+%	\&\& {\bullet{C}} \&\& {\bullet{F}}
+%	\arrow["7"{description}, from=3-7, to=1-5]
+%	\arrow["5"{description}, from=3-7, to=3-5]
+%	\arrow["2"{description}, shift left=2, from=5-5, to=3-7]
+%	\arrow["1"{description}, shift left=2, from=3-7, to=5-5]
+%	\arrow["3"{description}, shift right=2, from=5-5, to=5-3]
+%	\arrow["5"{description}, from=5-3, to=3-1]
+%	\arrow["6"{description}, from=3-3, to=1-3]
+%	\arrow["1"{description}, from=1-3, to=3-5]
+%	\arrow["2"{description}, from=3-5, to=5-5]
+%	\arrow["4"{description}, from=1-3, to=3-1]
+%	\arrow["5"{description}, shift left=2, from=3-1, to=3-3]
+%	\arrow["4"{description}, from=3-5, to=3-3]
+%	\arrow["3"{description}, from=1-5, to=3-5]
+%	\arrow["4"{description}, from=1-5, to=1-3]
+%	\arrow["2"{description}, from=3-5, to=5-3]
+%	\arrow["4"{description}, shift left=2, from=3-3, to=3-1]
+%\end{tikzcd}\]
+	
+	What is the current flow from $S$ to $T$? 
+    \Freeform{13}
+
+    Is the current flow the max-flow? 
+    \Choices {
+        \Choice{Yes}
+        \Choice*{No}
+    }
+
+    What is the value of max-flow? 
+    \Freeform{14}
+
+    What is the only remaining augmenting path in this residual graph? Write it as a string of vertices in the path. For instance if the path is from $S$ to $A$ to $D$ to $T$ you have to write ``SADT'' without the quotation marks.
+    \Freeform{SBAEFT}
+    
+	\section{Matching}
+    The company Algorithmia is preparing to transition back to the office in-person work.
+    
+    They have $n$ offices and $m$ employees that they need to assign to these offices. Given COVID restrictions, each office $i$ has a capacity $C_i$.
+    
+    Each employee has a list of offices that are within their driving distance. Algorithmia wants to assign as many employees to offices as possible, as long as, every employee is assigned to a single office which is within the employee's driving distance, and the number of employees assigned to every office is less than or equal to the office's capacity.
+    
+    You are asked to find the maximum possible number of employees that can be assigned to the offices. 
+    
+    Can this problem be modeled as max-flow?
+    \Choices{
+        \Choice*{Yes}
+        \Choice{No}
+    }
+
+    We want to create a directed graph with two dummy vertices $S$ and $T$, and a set of additional vertices: one vertex for each employee and one vertex for each office. In total there are $n + m + 2$ vertices. We want the max-flow from $S$ to $T$ in this graph to be equal to the maximum number of employees that can be assigned to the offices. Please answer the following questions to construct the edges in this graph.
+    
+    For each employee $i$, we will add an edge from $S$ to $i$. What should be the capacity of this edge? 
+    \Choices {
+        \Choice{$+\infty$}
+        \Choice{$m$}
+        \Choice{$n$}
+        \Choice*{$1$}
+        \Choice{the number of offices that are within driving distance of the employee.}
+        \Choice{All of the above are valid.}
+    }
+    
+    For each employee $i$ and office $j$ that is within $i$'s driving distance, we will add an edge from $i$ to $j$. What should be the capacity of this edge? 
+    \Choices {
+        \Choice{$+\infty$}
+        \Choice{$m$}
+        \Choice{$n$}
+        \Choice{$1$}
+        \Choice{The office $j$'s capacity $C_j$.}
+        \Choice*{All of the above are valid.}
+    }
+
+    For each office $j$ we will add an edge from $j$ to $T$. What should be the capacity of this edge? 
+    \Choices {
+        \Choice{$+\infty$}
+        \Choice{$m$}
+        \Choice{$n$}
+        \Choice{$1$}
+        \Choice*{The office $j$'s capacity $C_j$.}
+        \Choice{All of the above are valid.}
+    }
+    
+    \section{Distinct Flows}
+    Suppose that we have a graph on $n$ nodes with capacities on the edges. For each pair of nodes $u$ and $v$ we compute the maximum flow with $u$ as a source and $v$ as a sink. In total we collect $n(n-1)$ numbers. If $x$ is the minimum among these $n(n-1)$ numbers, how many times is $x$ repeated in this list? Choose the smallest correct range:
+    \Choices{
+    	\Choice{$\geq 2$ times.}
+    	\Choice{$\geq 1$ times.}
+    	\Choice{$= n(n-1)$ times.}
+    	\Choice*{$\geq n-1$ times.}
+    	\Choice{$\geq n$ times.}
+    }
+}

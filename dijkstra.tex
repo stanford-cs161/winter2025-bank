@@ -1,0 +1,109 @@
+\documentclass{bamboo} 
+
+\Document{
+	\Title{Dijkstra}
+	\section{Conditions for Shortest Path Algorithms}
+	Suppose that we want to find the shortest path between two nodes in the following graph. Which algorithm can we use?
+	\Tikz*{
+		\begin{scope}[every node/.style={circle, line width=1, draw=Black, fill=LightGray, inner sep=3}]
+			\node (A) at (0, 1) {};
+			\node (B) at (3, 1) {};
+			\node (C) at (3, -1) {};
+			\node (D) at (0, -1) {};
+		\end{scope}
+		\foreach \u/\v/\c in {A/B/1, B/C/10, C/A/3, D/A/4, D/C/9}
+			\draw[line width=1] (\u) -- node[pos=0.5, fill=White] {\c} (\v);
+	}
+	\Choices{
+		\Choice{BFS}
+		\Choice{Dijkstra}
+		\Choice{Bellman-Ford}
+		\Choice{All of the above}
+		\Choice{BFS and Dijkstra}
+		\Choice*{Dijkstra and Bellman-Ford}
+	}
+	We have a graph with negative edge weights. Can we use Dijkstra to find shortest paths?
+	\Choices{
+		\Choice{Yes}
+		\Choice*{No}
+	}
+	We have an undirected graph with positive edge weights. Can we use Dijkstra to find shortest paths?
+	\Choices{
+		\Choice*{Yes}
+		\Choice{No}
+	}
+	We have a directed graph with positive edge weights. Can we use Dijkstra to find shortest paths?
+	\Choices{
+		\Choice*{Yes}
+		\Choice{No}
+	}
+	\section{Dijkstra Forensics}
+	Suppose we run Dijkstra on some graph with nodes $A, B, C, D, E, F$ that has nonnegative ($\geq 0$) edge weights, starting from the node $A$. In the middle of the algorithm our computer crashes. We look through the memory dump, and see that the state of $d$ looked as follows when the crash happened:
+	\[ d[A]=0, d[B]=5, d[C]=4, d[D]=15, d[E]=2, d[F]=20. \]
+	Additionally from the memory dump we see that the current node when the crash happened was node $C$.
+	
+	What is the minimum possible length of the shortest path from node $A$ to node $B$?
+	\Freeform{4}
+	What is the maximum possible length of the shortest path from node $A$ to node $B$?
+	\Freeform{5}
+	What is the minimum possible length of the shortest path from node $A$ to node $D$?
+	\Freeform{4}
+	What is the maximum possible length of the shortest path from node $A$ to node $D$?
+	\Freeform{15}
+	What is the minimum possible length of the shortest path from node $A$ to node $E$?
+	\Freeform{2}
+	What is the maximum possible length of the shortest path from node $A$ to node $E$?
+	\Freeform{2}
+	What is the minimum possible length of the shortest path from node $A$ to node $F$?
+	\Freeform{4}
+	What is the maximum possible length of the shortest path from node $A$ to node $F$?
+	\Freeform{20}
+	If we run the Dijkstra algorithm on the graph of U.S.\ streets/roads/highways/etc., starting from the Stanford Oval, which of the following locations will become the current node first?
+	\Choices{
+		\Choice{Times Square in New York}
+		\Choice{The Hollywood Sign}
+		\Choice*{Tresidder Union}
+		\Choice{The ordering might differ in each run of Dijkstra.}
+	}
+	\section{Runtime}
+	Suppose that we implement Dijkstra with a red-black tree. What is the asymptotically smallest upper bound on runtime in terms of $n$ (the number of nodes) and $m$ (the number of edges).
+	\Choices{
+		\Choice{$O(n\log n + m)$}
+		\Choice*{$O((n+m)\log n)$}
+		\Choice{$O(n+m)$}
+	}
+	What if we implement Dijkstra with a Fibonacci heap? What is the asymptotically smallest upper bound on runtime in terms of $n$ (the number of nodes) and $m$ (the number of edges).
+	\Choices{
+		\Choice*{$O(n\log n + m)$}
+		\Choice{$O((n+m)\log n)$}
+		\Choice{$O(n+m)$}
+	}
+	Suppose that we have a heap data structure that does not support updating the keys (many standard implementations of heaps in various programming languages do not support the update key operation).
+	
+	Our data structure keeps a collection of items, each of form $(\text{key},\text{object})$, where keys are numbers, and object can be anything (we will store vertices as our objects). Our data structure supports two operations:
+	\begin{itemize}
+		\item Insert a new $(\text{key},\text{object})$ into the collection.
+		\item Remove the item with the lowest key currently in the collection and return the key and object for it.
+	\end{itemize}
+	We run a modification of Dijkstra with the following pseudo-code:
+	\begin{Algorithm*}
+		$d\gets \text{array indexed with vertices and filled with }\infty$\;
+		$H\gets \text{empty heap}$\;
+		Insert $(0, \text{starting node})$ into $H$\;
+		\While{$H$ is not empty}{
+			Remove $(\text{key}, \text{vertex})$ from $H$ with the smallest $\text{key}$.\;
+			\If {$\text{key}<d[\text{vertex}]$} {
+				$d[\text{vertex}]\gets \text{key}$\;
+				\For {all neighbors $w$ of $\text{vertex}$}{
+					Insert $(d[\text{vertex}]+\text{weight}(\text{vertex},w), w)$ into $H$.\;
+				}
+			}
+		}
+	\end{Algorithm*}
+	What is the asymptotically smallest upper bound on the runtime of the above code assuming that both the insert and remove operations on $H$ take $O(\log(\text{size of }H))$ time? Assume that $n-1\leq m\leq n^2$ (in particular $\log m=\Theta(\log n)$).
+	\Choices{
+		\Choice{$O(n\log n + m)$}
+		\Choice*{$O(m\log n)$}
+		\Choice{$O(n+m)$}
+	}
+}

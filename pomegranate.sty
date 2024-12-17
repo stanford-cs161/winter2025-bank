@@ -1,0 +1,1314 @@
+% -- LaTeX 3
+
+\RequirePackage{expl3}
+\RequirePackage{xparse}
+\RequirePackage{l3keys2e}
+\RequirePackage{quiver}
+\RequirePackage{graphicx}
+% -- Package declaration
+
+\ProvidesExplPackage
+	{pomegranate}
+	{2020/11/19}
+	{1.7}
+	{Cultivated TeX preamble by Nima Anari}
+	
+\keys_define:nn { pomegranate } {
+	% Fonts
+	font .choices:nn = {
+		palatino,
+		kpfonts,
+		quicksand,
+		lmodern,
+		times,
+		libertine,
+		cmbright,
+		texdefault
+	} {\tl_set_eq:NN \l_pom_font_tl \l_keys_choice_tl},
+	fontpath .tl_set:N = \l_pom_fontpath_tl,
+	
+	% Colors
+	colors .bool_set:N = \l_pom_colors_bool,
+	persons .clist_set:N = \l_pom_persons_clist,
+	
+	% Boxes
+	boxes .bool_set:N = \l_pom_boxes_bool,
+	boxcolors .clist_set:N = \l_pom_box_colors_clist,
+	
+	% Math macros
+	symbs .bool_set:N = \l_pom_symbs_bool,
+	macros .bool_set:N = \l_pom_macros_bool,
+	fields .clist_set:N = \l_pom_fields_clist,
+	operators .clist_set:N = \l_pom_operators_clist,
+	numbers .clist_set:N = \l_pom_numbers_clist,
+	delimiters .clist_set:N = \l_pom_delimiters_clist,
+	separators .clist_set:N = \l_pom_separators_clist,
+	shortell .bool_set:N = \l_pom_shortell_bool,
+	probability .choices:nn = {
+		alias,
+		replace,
+		texdefault
+	} {\tl_set_eq:NN \l_pom_probability_tl \l_keys_choice_tl},
+	eval .bool_set:N = \l_pom_eval_bool,
+	prob .choices:nn =  {\tl_set_eq:NN \l_pom_prob_tl \l_keys_choice_tl},
+	
+	% Typography
+	microtype .bool_set:N = \l_pom_microtype_bool,
+	paragraphs .choices:nn = {
+		indentskip,
+		skip,
+		texdefault
+	} {\tl_set_eq:NN \l_pom_paragraphs_tl \l_keys_choice_tl},
+	geometry .tl_set:N = \l_pom_geometry_tl,
+	spacing .choices:nn = {
+		single,
+		onehalf,
+		double,
+		texdefault
+	} {\tl_set_eq:NN \l_pom_spacing_tl \l_keys_choice_tl},
+	aligns .bool_set:N = \l_pom_aligns_bool,
+	
+	% Authors
+	authors .choices:nn = {
+		blocks,
+		footnotes,
+		texdefault
+	} {\tl_set_eq:NN \l_pom_authors_tl \l_keys_choice_tl},
+	
+	% Biblio
+	biblio .choices:nn = {
+		biblatex,
+		natbib,
+		bibtex,
+		texdefault
+	} {\tl_set_eq:NN \l_pom_biblio_tl \l_keys_choice_tl},
+	bibliostyle .tl_set:N = \l_pom_biblio_style_tl,
+	bibliosources .clist_set:N = \l_pom_biblio_sources_clist,
+	biblatexbackend .tl_set:N = \l_pom_biblatex_backend_tl,
+	simulateprepost .bool_set:N = \l_pom_simulate_prepost_bool,
+	simulatebiblatex .bool_set:N = \l_pom_simulate_biblatex_bool,
+	simulatenatbib .bool_set:N = \l_pom_simulate_natbib_bool,
+	
+	% Graphics
+	graphics .bool_set:N = \l_pom_graphics_bool,
+	graphicspath .tl_set:N = \l_pom_graphics_path,
+	
+	% Links
+	links .bool_set:N = \l_pom_links_bool,
+	linkoptions .tl_set:N = \l_pom_link_options_tl,
+	linkcolors .bool_set:N = \l_pom_link_colors_bool,
+	
+	% Theorems
+	theorems .bool_set:N = \l_pom_theorems_bool,
+	number in .tl_set:N = \l_pom_number_in_tl,
+	share counter .bool_set:N = \l_pom_share_counter_bool,
+	plains .clist_set:N = \l_pom_plains_clist,
+	definitions .clist_set:N = \l_pom_definitions_clist,
+	remarks .clist_set:N = \l_pom_remarks_clist,
+	
+	% Algorithm
+	algorithms .bool_set:N = \l_pom_algorithms_bool,
+	
+	% Tags
+	tags .clist_set:N = \l_pom_tags_clist,
+	
+	% Meta
+	texpad .meta:n = {
+		biblio = bibtex,
+		microtype = false,
+		fontpath = ,
+	},
+	beamer .meta:n = {
+		geometry = texdefault,
+		theorems = false,
+		links = false,
+		paragraphs = texdefault,
+		authors = texdefault,
+		spacing = texdefault
+	},
+	
+	% Journals & Conferences
+	sicomp .meta:n = {
+		font = texdefault,
+		microtype = false,
+		fontpath = ,
+		paragraphs = texdefault,
+		spacing = texdefault,
+		geometry = texdefault,
+		authors = texdefault,
+		theorems = false,
+		biblio = bibtex,
+		bibliostyle = siamplain,
+		links = false,
+		tags = sicomp
+	},
+	sigconf .meta:n = {
+		font = texdefault,
+		microtype = true,
+		fontpath = ,
+		paragraphs = texdefault,
+		spacing = texdefault,
+		geometry = texdefault,
+		authors = texdefault,
+		biblio = natbib,
+		bibliostyle = ACM-Reference-Format,
+		symbs = false,
+		links = true,
+		linkcolors = false,
+		tags = sigconf
+	},
+	lipics .meta:n = {
+		font = texdefault,
+		microtype = false,
+		fontpath = ,
+		paragraphs = texdefault,
+		spacing = texdefault,
+		geometry = texdefault,
+		authors = texdefault,
+		theorems = false,
+		biblio = bibtex,
+		bibliostyle = plainurl,
+		links = false,
+		tags = lipics
+	},
+	icml .meta:n = {
+		font = texdefault,
+		microtype = true,
+		fontpath = ,
+		paragraphs = texdefault,
+		spacing = texdefault,
+		geometry = texdefault,
+		authors = texdefault,
+		theorems = true,
+		biblio = texdefault,
+		links = true,
+		linkcolors = false,
+		tags = icml
+	}
+}
+
+\keys_set:nn { pomegranate } {
+	font = palatino,
+	fontpath = <PomPath>fonts/,
+	
+	colors,
+	persons = ,
+	
+	boxes,
+	boxcolors = {
+		Gray,
+		Orange,
+		Yellow,
+		Green,
+		Blue,
+		Navy,
+	},
+	
+	symbs,
+	macros,
+	fields = {C, F, N, Q, R, Z},
+	operators = {poly, supp, conv, rank, Im, Re},
+	numbers = {1},
+	shortell,
+	probability = replace,
+	eval,
+	delimiters = {
+		{set, brace},
+		{card, vert},
+		{abs, vert},
+		{norm, Vert},
+		{dotprod, angle},
+		{parens, paren},
+		{braces, brace},
+		{bracks, brack},
+		{angles, angle},
+		{floor, floor},
+		{ceil, ceil},
+	},
+	separators = {
+		{given, vert},
+		{river, Vert},
+	},
+	
+	microtype,
+	paragraphs=skip,
+	geometry={margin=1in},
+	spacing=texdefault,
+	aligns,
+	
+	authors=footnotes,
+	
+	biblio=biblatex,
+	bibliostyle=alphabetic,
+	bibliosources=,
+	biblatexbackend=biber,
+	simulateprepost,
+	simulatebiblatex,
+	simulatenatbib,
+	
+	graphics,
+	
+	links,
+	linkoptions={capitalize},
+	linkcolors,
+	
+	theorems,
+	share counter,
+	number in = ,
+	plains = {theorem, lemma, corollary, proposition, fact, claim, conjecture},
+	definitions = {definition},
+	remarks = {remark, example},
+	
+	algorithms,
+	
+	tags=default,
+}
+
+\ProcessKeysOptions{pomegranate}
+
+% -- Compatibility
+
+\cs_if_exist:NF \str_case:Vn {
+	\cs_generate_variant:Nn \str_case:nn {Vn}
+}
+
+\cs_if_exist:NF \str_case:VnF {
+	\cs_generate_variant:Nn \str_case:nnF {VnF}
+}
+
+\cs_if_exist:NF \text_titlecase:n {
+	\cs_set:Nn \text_titlecase:n {
+		\uppercase{\str_head:n {#1}} \str_tail:n {#1}
+	}
+}
+
+\prg_new_conditional:Nnn \sys_if_engine_vvtex: {p, T, F, TF} {
+	\cs_if_exist:NTF \vvtexinspectint {
+		\prg_return_true:
+	} {
+		\prg_return_false:
+	}
+}
+
+\sys_if_engine_vvtex:T {
+	\keys_set:nn { pomegranate } {
+		texpad
+	}
+}
+
+\DeclareDocumentCommand \Noop {} {}
+
+% -- Common packages
+
+\newcommand{\RemoveLaTeXError}{
+	\let\@latex@error\@gobble
+}
+
+\RequirePackage{amsmath}
+\bool_if:NT \l_pom_symbs_bool {
+	\RequirePackage{amssymb}
+}
+\RequirePackage{mathtools}
+\RequirePackage{dsfont}
+
+% -- CheatSheet
+
+\tl_new:N \l_pom_cheats_tl
+
+\DeclareDocumentCommand{\DeclareCheatText}{+m}{
+	\tl_put_right:Nn \l_pom_cheats_tl {
+		\tcbitem[blankest,raster~multicolumn=2]
+		#1
+	}
+}
+
+\DeclareDocumentCommand{\DeclareCheat}{+m}{
+	\tl_put_right:Nn \l_pom_cheats_tl {
+		\tcbitem
+		\texttt{\tl_to_str:n {#1}}
+		\tcbitem
+		#1
+	}
+}
+
+\DeclareDocumentCommand{\PomegranateCheatSheet}{}{
+	\begin{Box}[Orange, breakable]{Cheat~Sheet}
+		\begin{tcbitemize}[raster~equal~height=rows]
+			\tl_use:N \l_pom_cheats_tl
+		\end{tcbitemize}
+	\end{Box}
+}
+
+\DeclareCheatText{This~is~the~cheatsheet~for~the ~package~pomegranate.}
+
+% -- Fonts
+
+\sys_if_engine_pdftex:T {
+	\RequirePackage[T1]{fontenc}	
+}
+
+\sys_if_engine_luatex:T {
+	\tl_set:Nx \l_pom_path_tl {
+		\lua_now:e {
+			tex.print(file.pathpart(file.collapsepath(status.filename, true)) .. "/")
+		}
+	}
+	\DeclareDocumentCommand{\PomPath}{}{
+		\tl_use:N \l_pom_path_tl
+	}
+}
+
+
+\DeclareSymbolFont{bbold}{U}{bbold}{m}{n}
+\DeclareSymbolFontAlphabet{\mathbbold}{bbold}
+
+\str_case:Vn {\l_pom_font_tl} {
+	{palatino} {
+		\RequirePackage[T1]{fontenc}
+		\RequirePackage[sc]{mathpazo}
+	}
+	{kpfonts} {
+		\RequirePackage[T1]{fontenc}
+		\RequirePackage{kpfonts}
+	}
+	{quicksand} {
+		\regex_replace_all:nnN {
+			<(\w+)>
+		} {
+			\c{\1}
+		} \l_pom_fontpath_tl
+		\tl_set:Nx \l_pom_fontpath_tl {\l_pom_fontpath_tl}
+		
+		\DeclareDocumentCommand{\FontPath}{}{\tl_use:N \l_pom_fontpath_tl}
+	
+		\RequirePackage[no-math]{fontspec}
+		\RequirePackage[T1, euler-digits, euler-hat-accent]{eulervm}
+		
+		\DeclareMathAlphabet{\mathbb}{U}{BOONDOX-ds}{m}{n}
+		\SetMathAlphabet{\mathbb}{bold}{U}{BOONDOX-ds}{b}{n}
+		\DeclareMathAlphabet{\mathbbb} {U}{BOONDOX-ds}{b}{n}
+		
+		\defaultfontfeatures{Ligatures=TeX}
+		
+		\use:x {
+			\exp_not:N \setmainfont{Quicksand}[
+				Path={\tl_use:N \l_pom_fontpath_tl},
+				UprightFont=*-Regular,
+				BoldFont=*-SemiBold,
+				AutoFakeSlant=0.2,
+				BoldItalicFont=*-SemiBold,
+				BoldItalicFeatures={FakeSlant=0.2}
+			]
+
+			\exp_not:N \setsansfont{Quicksand}[
+				Path={\tl_use:N \l_pom_fontpath_tl},
+				UprightFont=*-Regular,
+				BoldFont=*-SemiBold,
+				AutoFakeSlant=0.2,
+				BoldItalicFont=*-SemiBold,
+				BoldItalicFeatures={FakeSlant=0.2}
+			]
+			
+			\exp_not:N \newfontfamily \exp_not:N \Light {Quicksand}[
+				Path={\tl_use:N \l_pom_fontpath_tl},
+				UprightFont=*-Light,
+				BoldFont=*-Medium,
+				AutoFakeSlant=0.2,
+				BoldItalicFont=*-Medium,
+				BoldItalicFeatures={FakeSlant=0.2}
+			]
+			
+			\exp_not:N \newfontfamily \exp_not:N \Handwriting {ShadowsIntoLightTwo}[
+				Path={\tl_use:N \l_pom_fontpath_tl},
+				UprightFont=*-Regular,
+				AutoFakeSlant=0.2,
+				AutoFakeBold=4.0
+			]
+		}
+		\DeclareDocumentCommand{\TextLight}{+m}{{\Light #1}}
+		\DeclareDocumentCommand{\TextHandwriting}{+m}{{\Handwriting #1}}
+	}
+	{lmodern} {
+		\RequirePackage{lmodern}
+	}
+	{times} {
+		\RequirePackage{newtxtext}
+		\RequirePackage{newtxmath}
+	}
+	{libertine} {
+		\PassOptionsToPackage{warnings-off={mathtools-colon, mathtools-overbracket}}{unicode-math}
+		\RequirePackage{libertinus}
+	}
+	{cmbright} {
+		\RequirePackage[T1]{fontenc}
+		\RequirePackage{cmbright}
+	}
+}
+
+% -- Colors
+
+\bool_if:NT \l_pom_colors_bool {
+	\RequirePackage{xcolor}
+
+	\DeclareDocumentCommand {\DeclareColor} {m m} {
+		\use:x {
+			\exp_not:N \definecolor{\cs_to_str:N #1}{RGB}{#2}
+		}
+		\use:x {
+			\exp_not:N \DeclareDocumentCommand {\exp_not:N #1} {m} {
+				\exp_not:N \textcolor{\cs_to_str:N #1}{####1}
+			}
+		}
+	}
+	
+	\DeclareColor{\Black}{0, 0, 0}
+	\DeclareColor{\White}{255, 255, 255}
+	\DeclareColor{\Gray}{127, 127, 127}
+	\DeclareColor{\LightGray}{216, 216, 216}
+	\DeclareColor{\Orange}{237, 125, 49}
+	\DeclareColor{\LightOrange}{251, 229, 214}
+	\DeclareColor{\Yellow}{255, 192, 0}
+	\DeclareColor{\LightYellow}{255, 242, 200}
+	\DeclareColor{\Blue}{91, 155, 213}
+	\DeclareColor{\LightBlue}{222, 235, 247}
+	\DeclareColor{\Green}{112, 173, 71}
+	\DeclareColor{\LightGreen}{226, 240, 217}
+	\DeclareColor{\Navy}{68, 114, 196}
+	\DeclareColor{\LightNavy}{218, 227, 243}
+	\DeclareCheat{\Black{A}\White{B}\Gray{C}\LightGray{D}\Orange{E}\LightOrange{F}\Yellow{G}\LightYellow{H}\Blue{I}\LightBlue{J}\Green{K}\LightGreen{L}\Navy{M}\LightNavy{N}}
+	
+	\DeclareDocumentCommand {\DeclarePerson} {m O{Orange}} {
+		\use:x {
+			\exp_not:N \DeclareDocumentCommand {\exp_not:N #1} {+m} {
+				{\exp_not:N \color{#2}\cs_to_str:N #1:~####1}
+			}
+		}
+	}
+	
+	\clist_map_inline:Nn \l_pom_persons_clist {
+		\exp_args:Nc \DeclarePerson{#1}
+	}
+}
+
+% -- Boxes
+
+\bool_if:NT \l_pom_boxes_bool {
+	\RequirePackage[many]{tcolorbox}
+	
+	\tcbset{
+		Base/.style={
+			fonttitle={\bfseries},
+			boxrule=0ex,
+			top=0.2ex,
+			bottom=0.2ex,
+			left=0.2ex,
+			right=0.2ex
+		},
+		Inline/.style={
+			nobeforeafter,
+			tcbox~raise~base
+		},
+		Top/.style={
+			raster~valign=top
+		},
+		Center/.style={
+			raster~valign=center
+		},
+		Bottom/.style={
+			raster~valign=bottom
+		}
+	}
+	
+	\DeclareTColorBox{Box}{O{} m}{
+		Base,
+		title={#2},
+		#1
+	}
+	
+	\DeclareCheat{\begin{Box}[Navy]{Title}Body\end{Box}}
+	
+	\DeclareTCBox{\FitBox}{O{} m}{
+		Base,
+		title={#2},
+		#1
+	}
+	
+	\DeclareCheat{\FitBox[Navy]{Title}{Body}}
+	
+	\DeclareTCBox{\InlineBox}{O{} O{}}{
+		Base,
+		Inline,
+		title={#2},
+		#1
+	}
+	
+	\DeclareCheat{This~is~some~\InlineBox[Orange]{Text}.}
+	
+	\DeclareDocumentCommand{\Column}{O{} D<>{1}}{
+		\tcbitem[blankest, raster~multicolumn=#2, #1]
+	}
+	
+	\DeclareDocumentEnvironment{Columns}{O{} D<>{2}}{
+		\begin{tcbitemize}[raster~columns=#2, #1]
+	} {
+		\end{tcbitemize}
+	}
+	
+	\DeclareCheat{
+		\begin{Columns}<3>
+			\Column A
+			\Column B
+			\Column C
+			\Column D
+			\Column E
+			\Column F
+			\Column<2> G
+			\Column H
+		\end{Columns}
+	}
+	
+	\NewDocumentCommand{\DeclareBoxColor}{m}{
+		\tcbset{
+			#1/.style={
+				colbacktitle=#1,
+				colframe=#1,
+				colback=Light#1
+			}
+		}
+	}
+	
+	\clist_map_inline:Nn \l_pom_box_colors_clist {
+		\DeclareBoxColor{#1}
+	}
+}
+
+% -- Typography
+
+\bool_if:NT \l_pom_microtype_bool {
+	\RequirePackage{microtype}
+}
+\str_case:Vn \l_pom_paragraphs_tl {
+	{skip} {
+		\RequirePackage{parskip}
+	}
+	{indentskip} {
+		\RequirePackage[indent]{parskip}
+	}
+}
+\str_case:VnF \l_pom_geometry_tl {
+	{texdefault} {}
+} {
+	\use:x {
+		\exp_not:N\RequirePackage[\l_pom_geometry_tl]{geometry}
+	}
+}
+\str_case:Vn \l_pom_spacing_tl {
+	{single} {
+		\RequirePackage[singlespacing]{setspace}
+	}
+	{onehalf} {
+		\RequirePackage[onehalfspacing]{setspace}
+	}
+	{double} {
+		\RequirePackage[doublespacing]{setspace}
+	}
+}
+
+\bool_if:NT \l_pom_aligns_bool {
+	\DeclareDocumentCommand{\Left}{+m}{
+		\begin{flushleft}
+			#1	
+		\end{flushleft}
+	}
+	\DeclareDocumentCommand{\Right}{+m}{
+		\begin{flushright}
+			#1	
+		\end{flushright}
+	}
+	\DeclareDocumentCommand{\Center}{+m}{
+		\begin{center}
+			#1	
+		\end{center}
+	}
+	\DeclareCheat{
+		\Left{A}
+		\Center{B}
+		\Right{C}
+	}
+}
+
+
+% -- Authors
+\str_case:Vn \l_pom_authors_tl {
+	{blocks} {
+		\RequirePackage[blocks]{authblk}
+	}
+	{footnotes} {
+		\RequirePackage[noblocks]{authblk}
+	}
+}
+
+% -- Biblio
+\str_case:Vn \l_pom_biblio_tl {
+	{biblatex} {
+		\use:x {
+			\exp_not:N \RequirePackage[
+				backend=\l_pom_biblatex_backend_tl,
+				style=\l_pom_biblio_style_tl,
+				maxnames=20,
+				url=false,
+				\bool_if:NT \l_pom_simulate_natbib_bool {natbib=true,}
+			]{biblatex}
+		}
+		\clist_map_inline:Nn \l_pom_biblio_sources_clist {
+			\addbibresource{#1}
+		}
+		\DeclareDocumentCommand{\PrintBibliography}{}{\printbibliography}
+	}
+	{natbib} {
+		\str_case:Vn \l_pom_biblio_style_tl {
+			{alphabetic} {
+				\RequirePackage[authoryear]{natbib}
+				\bibliographystyle{plainnat}
+			}
+			{numeric} {
+				\RequirePackage[numbers]{natbib}
+				\bibliographystyle{plainnat}
+			}
+		}
+		\use:x {
+			\exp_not:N \DeclareDocumentCommand{\exp_not:N \PrintBibliography}{}{
+				\exp_not:N \bibliography{\clist_use:Nn \l_pom_biblio_sources_clist {,}}
+			}
+		}
+		\bool_if:NT \l_pom_simulate_biblatex_bool {
+			\cs_set_eq:NN \cite \citep
+			\cs_set_eq:NN \Cite \Citep
+			\cs_set_eq:NN \textcite \citet
+			\cs_set_eq:NN \Textcite \Citet
+			\cs_set_eq:NN \citeauthor \citeauthor
+			\cs_set_eq:NN \Citeauthor \Citeauthor
+			\cs_set_eq:NN \citeyear \citeyear
+		}
+	}
+	{bibtex} {
+		\bool_if:NT \l_pom_simulate_prepost_bool {
+			\cs_set_eq:NN \l_pom_old_cite_cs \cite
+			\DeclareDocumentCommand{\l_pom_new_cite_cs}{o o m}{
+				\IfValueTF{#2}{
+					(#1~
+					\tl_if_empty:nTF {#2} {
+						\l_pom_old_cite_cs{#3}
+					} {
+						\l_pom_old_cite_cs[#2]{#3}
+					}
+					)
+				} {
+					\IfValueTF{#1}{
+						\l_pom_old_cite_cs[#1]{#3}
+					} {
+						\l_pom_old_cite_cs{#3}
+					}
+				}
+			}
+			\renewcommand{\cite}{\l_pom_new_cite_cs}
+			\cs_set_eq:NN \Cite \cite
+		}
+		
+		\str_case:VnF \l_pom_biblio_style_tl {
+			{alphabetic} {
+				\bibliographystyle{alpha}
+			}
+			{numeric} {
+				\bibliographystyle{plain}
+			}
+		} {
+			\use:x {
+				\exp_not:N \bibliographystyle{
+					\l_pom_biblio_style_tl
+				}
+			}
+		}
+		
+		\cs_set:Nn \pom_biblio_prepare: {}
+		
+		\use:x {
+			\exp_not:N \DeclareDocumentCommand{\exp_not:N \PrintBibliography}{}{
+				\exp_not:N \pom_biblio_prepare:
+				\exp_not:N \bibliography{\clist_use:Nn \l_pom_biblio_sources_clist {,}}
+			}
+		}
+		
+		\bool_if:nT {\l_pom_simulate_biblatex_bool || \l_pom_simulate_natbib_bool} {
+					
+			\str_set:Nx \l_pomcite_str {\str_use:N \c_sys_jobname_str -pomcite}
+			
+			\RequirePackage{databib}
+			\use:x {
+				\exp_not:N \DTLmultibibs{\l_pomcite_str}
+				\exp_not:N \DTLloadmbbl{\l_pomcite_str}{pomcite}{\clist_use:Nn \l_pom_biblio_sources_clist {,}}
+			}
+			\cs_set:Nx \pom_biblio_prepare: {
+				\exp_not:N \DTLnocite{\l_pomcite_str}{*}
+			}
+			
+			\tl_const:Nn \c_pom_prefix_author_tl {Pom~Author~}
+			\tl_const:Nn \c_pom_prefix_year_tl {Pom~Year~}
+			\cs_new:Nn \pom_author_tl:n {\c_pom_prefix_author_tl #1}
+			\cs_new:Nn \pom_year_tl:n {\c_pom_prefix_year_tl #1}
+			
+			\cs_new:Nn \pom_extract_lastname:n {{\tl_item:nn {#1}{2}}}
+			
+			\DTLforeachbibentry*{pomcite}{
+				\tl_set:cx {\pom_year_tl:n {\DBIBcitekey}} {{\DTLbibfield{Year}}}
+				\exp_args:NNnx \seq_set_split:Nnn \l_tmpa_seq {,} {\DTLbibfield{Author}}
+				\exp_args:NNnx \seq_set_split:Nnn \l_tmpb_seq {} {
+					\seq_map_function:NN \l_tmpa_seq \pom_extract_lastname:n
+				}
+				\tl_set:Nx \l_tmpa_tl {
+					\seq_use:Nnnn \l_tmpb_seq {~and~} {,~} {,~and~}
+				}
+				\tl_set:cx {\pom_author_tl:n {\DBIBcitekey}} {{\l_tmpa_tl}}
+			}
+			
+			\cs_new:Nn \pom_author:n {
+				\cs_if_exist:cTF {\pom_author_tl:n {#1}} {
+					{\tl_use:c {\pom_author_tl:n {#1}}}
+				} {
+					{\exp_not:N \textbf{#1}}
+				}
+			}
+			
+			\cs_new:Nn \pom_year:n {
+				\cs_if_exist:cTF {\pom_year_tl:n {#1}} {
+					{\tl_use:c {\pom_year_tl:n {#1}}}
+				} {
+					{\exp_not:N \textbf{#1}}
+				}
+			}
+			
+			\cs_new:Nn \pom_textcite:n {
+				\cs_if_exist:cTF {\pom_author_tl:n {#1}} {
+					{\tl_use:c {\pom_author_tl:n {#1}}~\cite{#1}}
+				} {
+					{\exp_not:N \textbf{#1}~\cite{#1}}
+				}
+			}
+			
+			\DeclareDocumentCommand{\citeauthor}{m}{
+				\clist_set:Nn \l_tmpa_clist {#1}
+				\exp_args:NNnx \seq_set_split:Nnn \l_tmpa_seq {} {
+					\clist_map_function:NN \l_tmpa_clist \pom_author:n
+				}
+				\seq_use:Nn \l_tmpa_seq {;~}
+			}
+			\cs_set_eq:NN \Citeauthor \citeauthor
+			
+			\DeclareDocumentCommand{\citeyear}{m}{
+				\clist_set:Nn \l_tmpa_clist {#1}
+				\exp_args:NNnx \seq_set_split:Nnn \l_tmpa_seq {} {
+					\clist_map_function:NN \l_tmpa_clist \pom_year:n
+				}
+				\seq_use:Nn \l_tmpa_seq {;~}
+			}
+			
+			\cs_set:Nn \pom_proto_textcite:n {
+				\clist_set:Nn \l_tmpa_clist {#1}
+				\exp_args:NNnx \seq_set_split:Nnn \l_tmpa_seq {} {
+					\clist_map_function:NN \l_tmpa_clist \pom_textcite:n
+				}
+				\seq_use:Nnnn \l_tmpa_seq {~and~} {,~} {,~and~}
+			}
+			
+			\bool_if:NT \l_pom_simulate_biblatex_bool {
+				\DeclareDocumentCommand{\textcite}{m}{\pom_proto_textcite:n {#1}}
+				\cs_set_eq:NN \Textcite \textcite
+			}
+			
+			\bool_if:NT \l_pom_simulate_natbib_bool {
+				\DeclareDocumentCommand{\citet}{m}{\pom_proto_textcite:n {#1}}
+				\cs_set_eq:NN \Citet \citet
+				\cs_set_eq:NN \citep \cite
+				\cs_set_eq:NN \Citep \citep
+			}
+		}
+	}
+}
+\DeclareCheatText{Use~PrintBibliography~to~print~biblio.~Use~textcite~to~cite~with~author~names~autospelled~in~text.~Never~write~citation~author~names~by~hand.}
+
+% -- Preload amsthm to let cleverref do its magic
+\bool_if:NT \l_pom_theorems_bool {
+	\cs_undefine:N \openbox
+	\RequirePackage{amsthm}
+}
+
+
+% -- Algorithms
+
+\bool_if:NT \l_pom_algorithms_bool {
+	\RequirePackage[
+		algo2e,
+		vlined
+	]{algorithm2e}
+	\DeclareDocumentEnvironment{Algorithm}{t! o}{
+		\RestyleAlgo{ruled}
+		\IfBooleanTF{#1}{
+			\LinesNumbered
+		} {
+			\LinesNotNumbered
+		}
+		\IfValueTF{#2}{
+			\begin{algorithm2e}[#2]
+		}{
+			\begin{algorithm2e}
+		}
+		\DontPrintSemicolon
+	} {
+		\end{algorithm2e}
+	}
+	
+	\DeclareDocumentEnvironment{Algorithm*}{t!}{
+		\par
+		\RestyleAlgo{plain}
+		\IfBooleanTF{#1}{
+			\LinesNumbered
+		} {
+			\LinesNotNumbered
+		}
+		\group_begin:
+		\RemoveLaTeXError
+		\begin{algorithm2e}[H]
+		\DontPrintSemicolon
+	} {
+		\end{algorithm2e}
+		\group_end:
+	}
+	
+	\DeclareCheat{
+		\begin{Algorithm*}
+			\For{$i=1,\dots,n$}{
+				print~$i$\;
+			}
+		\end{Algorithm*}
+	}
+	\DeclareCheatText{Star~means~inlines.~Use~the~non-starred~variant~for~boxed~algorithm~environment~suitable~for~floats.}
+}
+
+% -- Graphics
+\bool_if:NT \l_pom_graphics_bool {
+	\RequirePackage{tikz}
+	\RequirePackage{pgfplots}
+	\pgfplotsset{compat=newest}
+	
+	\DeclareDocumentCommand{\Tikz}{s t! O{} +m}{
+		\IfBooleanT{#1}{\begin{center}}
+		\IfBooleanTF{#2}{
+			\begin{tikzpicture}[remember~picture, #3]
+		}{
+			\begin{tikzpicture}[#3]
+		}
+			#4
+		\end{tikzpicture}
+		\IfBooleanT{#1}{\end{center}}
+	}
+	
+	\DeclareDocumentCommand{\TikzOverlay}{O{} +m}{
+		\begin{tikzpicture}[remember~picture, overlay, #1]
+			#2	
+		\end{tikzpicture}
+	}
+	
+	\DeclareCheat{
+		\Tikz{
+			\draw (0,0) -- (1, 1);
+		}
+	}
+	
+	\tikzdeclarecoordinatesystem{page}{
+		\pgfpointanchor{current~page}{north~east}
+		\pgf@xc=\pgf@x
+		\pgf@yc=\pgf@y
+		\pgfpointanchor{current~page}{south~west}
+		\pgf@xb=\pgf@x
+		\pgf@yb=\pgf@y
+		\clist_set:Nn \l_tmpa_clist {#1}
+		\clist_pop:NN \l_tmpa_clist \l_tmpa_tl
+		\pgfmathparse{(\pgf@xc-\pgf@xb)/2.*\l_tmpa_tl+(\pgf@xc+\pgf@xb)/2.}
+		\use:x{\exp_not:N \pgf@x=\pgfmathresult pt}
+		\clist_pop:NN \l_tmpa_clist \l_tmpa_tl
+		\pgfmathparse{(\pgf@yc-\pgf@yb)/2.*\l_tmpa_tl+(\pgf@yc+\pgf@yb)/2.}
+		\use:x {\exp_not:N \pgf@y=\pgfmathresult pt}
+	}
+}
+
+\tl_if_empty:NF \l_pom_graphics_path {
+	\graphicspath{{\l_pom_graphics_path}}
+}
+
+% -- Links
+\bool_if:NT \l_pom_links_bool {
+	\RequirePackage{hyperref}
+	\use:x {
+		\exp_not:N\RequirePackage[nameinlink, \l_pom_link_options_tl]{cleveref}
+	}
+	\bool_if:nT {\l_pom_link_colors_bool && \l_pom_colors_bool} {
+		\hypersetup {
+			colorlinks=true,
+			breaklinks=true,
+			linkcolor=Navy,
+			citecolor=Green,
+			urlcolor=Black
+		}
+	}
+	\DeclareCheat{\begin{theorem}\label{thm:sample-main}True~is~true.\end{theorem}Refer~to~\cref{thm:sample-main}.}
+	\DeclareCheatText{Always~use~cref~and~never~ref.}
+}
+
+% -- Theorems
+
+\bool_if:NT \l_pom_theorems_bool {
+	\DeclareDocumentCommand{\DeclareTheorem}{s D<>{plain} o m}{
+		\theoremstyle{#2}
+		\str_clear:N \l_tmpa_str
+		\str_clear:N \l_tmpb_str
+		\IfValueTF {#3} {
+			\bool_if:nTF {#1} {
+				\str_set:Nn \l_tmpb_str {#3}
+			} {
+				\str_set:Nn \l_tmpa_str {#3}
+			}
+		} {
+			\bool_if:NT \l_pom_share_counter_bool {
+				\str_set:Nx \l_tmpa_str {\clist_item:Nn \l_pom_plains_clist {1}}
+			}
+			\bool_if:nT {#1} {
+				\str_clear:N \l_tmpa_str
+			}
+			\str_if_eq:nVT {#4} \l_tmpa_str {
+				\str_clear:N \l_tmpa_str
+			}
+			\str_if_empty:NT \l_tmpa_str {
+				\str_if_empty:NF \l_pom_number_in_tl {
+					\str_set:Nx \l_tmpb_str {\l_pom_number_in_tl}
+				}
+			}
+		}
+		\use:x {
+			\exp_not:N\newtheorem{#4}
+			\str_if_empty:NF \l_tmpa_str {[\l_tmpa_str]}
+			{\text_titlecase:n #4}
+			\str_if_empty:NF \l_tmpb_str {[\l_tmpb_str]}
+		}
+		\use:x {\exp_not:N\newtheorem*{#4*}{\text_titlecase:n #4}}
+	}
+	
+	\clist_map_inline:Nn \l_pom_plains_clist {
+		\DeclareTheorem<plain>{#1}
+	}
+	
+	\clist_map_inline:Nn \l_pom_definitions_clist {
+		\DeclareTheorem<definition>{#1}
+	}
+	
+	\clist_map_inline:Nn \l_pom_remarks_clist {
+		\DeclareTheorem<remark>{#1}
+	}
+}
+
+% -- Math macros
+
+\bool_if:NT \l_pom_macros_bool {
+	\tl_const:Nn \c_pom_prefix_math_tl {Pom~Math~}
+	\tl_const:Nn \c_pom_prefix_text_tl {Pom~Text~}
+	
+	\cs_new:Nn \pom_math_tl:N {\c_pom_prefix_math_tl\cs_to_str:N #1}
+	\cs_new:Nn \pom_text_tl:N {\c_pom_prefix_text_tl\cs_to_str:N #1}
+	
+	\cs_set:Nn \pom_fork:N {
+		\cs_undefine:N \l_pom_tmp_cs
+		\exp_args:NNx \cs_new_protected:Npn \l_pom_tmp_cs {
+			\exp_not:N \mode_if_math:TF {
+				\exp_not:c {\pom_math_tl:N #1}
+			} {
+				\exp_not:c {\pom_text_tl:N #1}
+			}
+		}
+		\cs_if_exist:NTF #1 {
+			\cs_if_eq:NNF #1 \l_pom_tmp_cs {
+				\cs_set_eq:cN {\pom_math_tl:N #1} #1
+				\cs_set_eq:cN {\pom_text_tl:N #1} #1
+				\cs_set_eq:NN #1 \l_pom_tmp_cs
+			} 
+		} {
+			\cs_set_eq:NN #1 \l_pom_tmp_cs
+		}
+	}
+	
+	\NewDocumentCommand \DeclareDocumentMathCommand {m} {
+		\pom_fork:N #1
+		\exp_args:Nc \DeclareDocumentCommand {\pom_math_tl:N #1}
+	}
+	
+	\NewDocumentCommand \DeclareDocumentTextCommand {m} {
+		\pom_fork:N #1
+		\exp_args:Nc \DeclareDocumentCommand {\pom_text_tl:N #1}
+	}
+
+	\NewDocumentCommand \Class {m} {
+		\ensuremath{\mathsf{#1}}
+	}
+	
+	\DeclareCheat{$\poly,\supp,\conv,\rank,\Im,\Re$}
+	\DeclareCheatText{Use~DeclareOperator~to~define~your~own.}
+	
+	\DeclareCheat{\Class{NP}~and~\Class{\#P}.}
+	
+	\NewDocumentCommand \DeclareClass {m} {
+		\use:x {
+			\exp_not:N \DeclareDocumentTextCommand {\exp_not:N #1} {} {
+				{\exp_not:N \Class{\cs_to_str:N #1}}
+			}
+		}
+	}
+	
+	\NewDocumentCommand \DeclareField {m} {
+		\use:x {
+			\exp_not:N \DeclareDocumentMathCommand {\exp_not:N #1} {} {
+				{\exp_not:N \mathbb{\cs_to_str:N #1}}
+			}
+		}
+	}
+	
+	\NewDocumentCommand \DeclareOperator {m} {
+		\use:x {
+			\exp_not:N \DeclareDocumentMathCommand {\exp_not:N #1} {} {
+				{\exp_not:N \operatorname{\cs_to_str:N #1}}
+			}
+		}
+	}
+	
+	\DeclareCheat{$\C, \F, \N, \Q, \R, \Z$}
+	
+	\NewDocumentCommand \DeclareNumber {m} {
+		\use:x {
+			\exp_not:N \DeclareDocumentMathCommand {\exp_not:N #1} {} {
+				\str_case:VnF {\l_pom_font_tl} {
+					{palatino} {
+						\cs_if_eq:NNTF #1 \1 {
+							{\exp_not:N \mathbb{\cs_to_str:N #1}}
+						} {
+							{\exp_not:N \mathbbold{\cs_to_str:N #1}}
+						}
+					}
+					{kpfonts} {
+						\cs_if_eq:NNTF #1 \1 {
+							{\exp_not:N \mathds{\cs_to_str:N #1}}
+						} {
+							{\exp_not:N \mathbbold{\cs_to_str:N #1}}
+						}
+					}
+					{lmodern} {
+						{\exp_not:N \mathbbold{\cs_to_str:N #1}}
+					}
+					{times} {
+						{\exp_not:N \mathbbold{\cs_to_str:N #1}}
+					}
+					{texdefault} {
+						{\exp_not:N \mathbbold{\cs_to_str:N #1}}
+					}
+				} {
+					{\exp_not:N \mathbb{\cs_to_str:N #1}}
+				}
+			}
+		}
+	}
+	
+	\DeclareCheat{$\1$}
+	
+	\@ifpackagelater{xparse}{2017/05/12}{
+		\NewDocumentCommand \DeclareDelimiter {s m O{} m m} {
+			\use:x {
+				\exp_not:N \DeclareDocumentMathCommand{\exp_not:N #2}{s t! o e{\char_generate:nn{`_}{8}^} m} \exp_not:n {{
+					\group_begin:
+					\DeclareDocumentMathCommand{\Rel}{m}{
+						\mathrel{}\mathclose{}
+						\IfValueTF{##3}{
+							##3
+						}{
+							\bool_if:nT {##1 || #1}{\middle}
+						}
+						####1
+						\mathopen{}\mathrel{}
+					}
+					\bool_if:nTF{##2}{\operatorname*}{\operatorname}{#3}
+					\IfValueT{##4}{\c_math_subscript_token{##4}}
+					\IfValueT{##5}{\c_math_superscript_token{##5}}
+					\mathopen{}
+					\IfValueTF{##3}{
+						##3
+					}{
+						\bool_if:nT {##1 || #1}{\left}
+					}
+					#4
+					##6
+					\mathclose{}
+					\IfValueTF{##3}{
+						##3
+					}{
+						\bool_if:nT {##1 || #1}{\right}
+					}
+					#5
+					\group_end:
+				}}
+			}
+		}
+	} {
+		\NewDocumentCommand \DeclareDelimiter {s m O{} m m} {
+			\use:x {
+				\exp_not:N \DeclareDocumentMathCommand{\exp_not:N #2}{s t! o e{\char_generate:nn{`_}{8}^} m} \exp_not:n {{
+					\group_begin:
+					\DeclareDocumentMathCommand{\Rel}{m}{
+						\mathrel{}\mathclose{}
+						\IfValueTF{##3}{
+							##3
+						}{
+							\bool_if:nT {##1 || #1}{\middle}
+						}
+						####1
+						\mathopen{}\mathrel{}
+					}
+					\bool_if:nTF{##2}{\operatorname*}{\operatorname}{#3}
+					\exp_args:No \IfValueT{\use_i:nn ##4}{\c_math_subscript_token{\use_i:nn ##4}}
+					\exp_args:No \IfValueT{\use_ii:nn ##4}{\c_math_superscript_token{\use_ii:nn ##4}}
+					\mathopen{}
+					\IfValueTF{##3}{
+						##3
+					}{
+						\bool_if:nT {##1 || #1}{\left}
+					}
+					#4
+					##5
+					\mathclose{}
+					\IfValueTF{##3}{
+						##3
+					}{
+						\bool_if:nT {##1 || #1}{\right}
+					}
+					#5
+					\group_end:
+				}}
+			}
+		}
+	}
+	
+	\DeclareCheat{$\set{1,2}, \set{x\given \frac{x}{y}=1}, \set*{x\given \frac{x}{y}=1}$}
+	\DeclareCheatText{Starred~variants~auto-size~themselves,~same~with~all~delimiter~commands~below.}
+	\DeclareCheat{$\card{\frac{x}{y}}, \card*{\frac{x}{y}}$}
+	\DeclareCheat{$\abs{\frac{x}{y}}, \abs*{\frac{x}{y}}$}
+	\DeclareCheat{$\norm{\frac{x}{y}}, \norm*{\frac{x}{y}}$}
+	\DeclareCheat{$\dotprod{x,y},\dotprod*{\frac{1}{2},\frac{x}{y}}$}
+	\DeclareCheat{$\parens*{\frac{x}{y}}$}
+	\DeclareCheat{$\braces*{\frac{x}{y}}$}
+	\DeclareCheat{$\bracks*{\frac{x}{y}}$}
+	\DeclareCheat{$\angles*{\frac{x}{y}}$}
+	\DeclareCheat{$\floor*{\frac{x}{y}}$}
+	\DeclareCheat{$\ceil*{\frac{x}{y}}$}
+	
+	
+	\clist_map_inline:Nn \l_pom_fields_clist {
+		\exp_args:Nc \DeclareField {#1}
+	}
+	
+	\clist_map_inline:Nn \l_pom_operators_clist {
+		\exp_args:Nc \DeclareOperator {#1}
+	}
+	
+	\clist_map_inline:Nn \l_pom_numbers_clist {
+		\exp_args:Nc \DeclareNumber {#1}
+	}
+	
+	\bool_if:NT \l_pom_shortell_bool {
+		\DeclareDocumentMathCommand {\l} {} {\ell}
+		\DeclareCheat{Text:~\l.~Math~$\l$.}
+	}
+	
+	\clist_map_inline:Nn \l_pom_delimiters_clist {
+		\use:x {
+			\exp_not:N \DeclareDelimiter{
+				\exp_not:c {\clist_item:nn {#1}{1}}
+			}{
+				\exp_not:c {l\clist_item:nn {#1}{2}}
+			}{
+				\exp_not:c {r\clist_item:nn {#1}{2}}
+			}
+		}
+	}
+	
+	\clist_map_inline:Nn \l_pom_separators_clist {
+		\use:x {
+			\exp_not:N \DeclareDocumentMathCommand{
+				\exp_not:c {\clist_item:nn {#1}{1}}
+			} {} {
+				\exp_not:N\Rel{\exp_not:c {\clist_item:nn {#1}{2}}}
+			}
+		}
+	}
+	
+	\str_if_eq:VnF {\l_pom_probability_tl} {texdefault} {
+		\DeclareDelimiter{\E}[\mathbb{E}]{\lbrack}{\rbrack}
+		\DeclareDelimiter{\P}[\mathbb{P}]{\lbrack}{\rbrack}
+		\DeclareDelimiter{\D}[\mathcal{D}]{\lparen}{\rparen}
+		\DeclareCheat{$\P{X=1},\P*{X=1\given \frac{X}{X-1}<2}$}
+		\DeclareCheatText{You~can~use~sub~and~super~scripts~too,~just~use~them~after~the~P~or~star~if~you~have~the~starred~variant.}
+		\DeclareCheat{$\E{X=1\given Y=1}$}
+		\DeclareCheat{$\D{\mu\river\nu}$}
+		\DeclareCheatText{You~can~define~your~own~delimiter~commands~using~DeclareDelimiter.}
+	}
+	
+	\str_case:Vn {\l_pom_probability_tl} {
+		{alias} {
+			\cs_set_eq:NN \Pr \P
+		}
+		{replace} {
+			\cs_undefine:N \Pr
+		}
+	}
+	
+	\bool_if:NT \l_pom_eval_bool {
+		\DeclareDelimiter*{\eval}{.}{\rvert}
+	}
+}
+
+% -- Tags
+
+\seq_new:N \l_pom_tags_seq
+
+\NewDocumentCommand \AddTag {r<>} {
+	\seq_put_right:Nn \l_pom_tags_seq {#1}
+	\seq_remove_duplicates:N \l_pom_tags_seq
+}
+
+\NewDocumentCommand \RemoveTag {r<>} {
+	\seq_remove_all:Nn \l_pom_tags_seq {#1}
+}
+
+\NewDocumentCommand \Tag {D<>{default} +m} {
+	\seq_if_in:NnT \l_pom_tags_seq {#1} {#2}
+}
+
+\clist_map_inline:Nn \l_pom_tags_clist {
+	\AddTag<#1>
+}
+
+% -- Snippets
+
+\prop_new:N \l_pom_snippets_prop
+
+\NewDocumentCommand \DeclareSnippet {r<> +m} {
+	\prop_put:Nnn \l_pom_snippets_prop {#1} {#2}
+}
+
+\NewDocumentCommand \EnsureSnippet {r<>} {
+	\prop_item:Nn \l_pom_snippets_prop {#1}
+	\prop_put:Nnn \l_pom_snippets_prop {#1} {}
+}

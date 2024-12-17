@@ -1,0 +1,64 @@
+ 
+\documentclass{bamboo} 
+
+\usetikzlibrary{cd}
+\Document{
+	\Title{SCCs}
+	\section{Strongly Connected Components} 
+	Consider the directed graph below:
+	\Tikz*{
+		\begin{scope}[every node/.style={circle, line width=1, draw=Black, fill=LightGray, inner sep=3}]
+			\node (A) at (0, 1) {};
+			\node (B) at (3, 1) {};
+			\node (C) at (3, -1) {};
+			\node (D) at (0, -1) {};
+			\node (E) at (-1.5, -1) {};
+			\node (F) at (-3, 1) {};
+		\end{scope}
+		\foreach \u/\v in {B/A, C/A, C/B, D/C, E/F, F/A, A/E}
+			\draw[line width=1, -stealth] (\u) -- (\v);
+	}
+	
+    How many strongly connected components does this graph have? 
+    \Freeform{4}
+    
+    What is the minimum number of directed edges to add to this graph to make all the vertices strongly connected? 
+    \Freeform{1}
+
+    Assume you have two vertices $u$ and $v$ in a directed graph where there exists a path from $u$ to $v$. Which one of the following is incorrect about $u$ and $v$? 
+    \Choices {
+        \Choice{$u$ and $v$ can be in the same SCC.}
+        \Choice{$u$ and $v$ can be in different SCCs.}
+        \Choice{If $u$'s DFS finish time is less than $v$'s DFS finish time then $u$ and $v$ are in the same SCC.}
+        \Choice*{$u$'s DFS finish time is always greater than $v$'s DFS finish time.}
+    }
+
+    Assume you have two vertices $u$ and $v$ in a directed graph where $u$ and $v$ are in the same SCC. Which one of the following is incorrect about $u$ and $v$? 
+    \Choices{
+        \Choice{There exists a DFS tree where $u$ is in $v$'s subtree (subtree rooted at $v$).}
+        \Choice{There exists a DFS tree where $v$ is in $u$'s subtree (subtree rooted at $u$).}
+        \Choice*{There exists a DFS tree where $u$ is not in $v$'s subtree and $v$ is not in $u$'s subtree.}
+        \Choice{There exists a BFS tree where $u$ is not in $v$'s subtree and $v$ is not in $u$'s subtree}
+    }
+
+    \section{Topological Sorting}
+    Consider the DAG below:
+    \Tikz*{
+    	\begin{scope}[every node/.style={circle, line width=1, draw=Black, fill=LightGray, inner sep=3}]
+			\node (A) at (3, 0) {$A$};
+			\node (E) at (0, 0) {$E$};
+			\node (F) at (-3, 0) {$F$};
+			\node (D) at (0, 2) {$D$};
+			\node (B) at (0, -2) {$B$};
+			\node (C) at (-3, -2) {$C$};
+		\end{scope}
+		\foreach \u/\v in {D/E, D/A, E/A, B/A, F/D, F/E, F/B, C/B}
+			\draw[line width=1, -stealth] (\u) -- (\v);
+    }
+    How many different orderings of the vertices in the above graph (out of the $6!$ possible orderings) result in a topological sort? For instance $ABCDEF$ is an ordering that's not topologically sorted, but $FDCEBA$ is an ordering that's topologically sorted. 
+\Freeform{9}
+What is the lexicographically smallest topological ordering of the vertices?
+\Freeform{CFBDEA}
+If we use a DFS algorithm that breaks ties lexicographically (always picks the node with lexicographically smallest letter possible to start or proceed), what is the resulting topological ordering of the nodes?
+\Freeform{FDECBA}
+}

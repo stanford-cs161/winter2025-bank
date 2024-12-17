@@ -1,0 +1,133 @@
+\documentclass{bamboo} 
+
+\Document{
+	\Title{Dynamic Programming I}
+	\section{Recursive Formulae}
+	Suppose that we want to compute $2^n \mod M$ for some numbers $n\geq 0$ and $M\geq 2$. $2^n$ can require a lot of digits to write down for large $n$, and we want to avoid that, since the end result is $<M$.
+	
+	Our first attempt avoids multiplication and only uses addition modulo $M$. We use the fact that $2^n=2^{n-1}+2^{n-1} \pmod M$.
+	\begin{Algorithm*}
+		\SetKwProg{Function}{function}{:}{}
+		\Function{$\text{PowerOfTwo}(n, M)$}{
+			\If{$n=0$}{
+				\Return{$1$}\;
+			}
+			\Return{$(\text{PowerOfTwo}(n-1, M)+\text{PowerOfTwo}(n-1, M))\mod M$}\;
+		}
+	\end{Algorithm*}
+	What is the runtime of the above algorithm?
+	\Choices{
+		\Choice{$\Theta(n)$}
+		\Choice*{$\Theta(2^n)$}
+		\Choice{$\Theta(\log n)$}
+	}
+	Now let us replace this algorithm with an iterative one that stores the results:
+	\begin{Algorithm*}
+		$A\gets \text{array indexed with }0,\dots,n$\;
+		$A[0]\gets 1$\;
+		\For{$i=1,\dots,n$}{
+			$A[i]\gets (A[i-1]+A[i-1]) \mod M$\;
+		}
+		\Return{$A[n]$}
+	\end{Algorithm*}
+	What is the runtime of the above algorithm?
+	\Choices{
+		\Choice*{$\Theta(n)$}
+		\Choice{$\Theta(2^n)$}
+		\Choice{$\Theta(\log n)$}
+	}
+	What if we are allowed to use multiplication? Suppose that $n$ is a power of two.
+	\begin{Algorithm*}
+		$B\gets \text{array indexed with }0,\dots,\log n$\;
+		$B[0]\gets 2$\;
+		\For{$i=1,\dots,\log n$}{
+			$B[i]\gets (B[i-1]\times B[i-1]) \mod M$\;
+		}
+		\Return{$B[\log n]$}\;
+	\end{Algorithm*}
+	What is the value of $B[i]$ in the above algorithm?
+	\Choices{
+		\Choice*{$2^{2^{i}} \mod M$}
+		\Choice{$2^i \mod M$}
+		\Choice{$2^{i^2} \mod M$}
+	}
+	What is the runtime of this algorithm?
+	\Choices{
+		\Choice{$\Theta(n)$}
+		\Choice{$\Theta(2^n)$}
+		\Choice*{$\Theta(\log n)$}
+	}
+	What if $n$ is not a power of two? We can run the following slightly modified algorithm:
+	\begin{Algorithm*}
+		$B\gets \text{array indexed with }0,\dots,\floor{\log n}$\;
+		$B[0]\gets 2$\;
+		\For{$i=1,\dots,\floor{\log n}$}{
+			$B[i]\gets (B[i-1]\times B[i-1]) \mod M$\;
+		}
+		Let the binary representation of $n$ be $(x_{\floor{\log n}}x_{\floor{\log n}-1}\cdots x_0)$.\;
+		$R\gets 1$\;
+		\For{$i=0,\dots,\floor{\log n}$}{
+			\If{$x_i=1$}{
+				$R\gets (R\times B[i]) \mod M$\;
+			}
+		}
+		\Return{$R$}\;
+	\end{Algorithm*}
+	What is the runtime of this algorithm?
+	\Choices{
+		\Choice{$\Theta(n)$}
+		\Choice{$\Theta(2^n)$}
+		\Choice*{$\Theta(\log n)$}
+	}
+	Remark: A clever algorithm inspired by the above can compute $\text{Fibonacci}(n)$ modulo a desired number $M$, in time $O(\log n)$. As a challenge, try to use the following identity involving Fibonacci numbers and matrix multiplication, to come up with this $O(\log n)$ algorithm.
+	\[ 
+		\begin{bmatrix}
+			\text{Fibonacci}(n)\\
+			\text{Fibonacci}(n-1)	
+		\end{bmatrix} =
+		\begin{bmatrix}
+			1 & 1\\
+			1 & 0
+		\end{bmatrix}
+		\begin{bmatrix}
+			\text{Fibonacci}(n-1)\\
+			\text{Fibonacci}(n-2)	
+		\end{bmatrix}
+	\]
+	
+	\section{Shorest Paths}
+	Suppose that we have a weighted graph with $n$ vertices and $m$ edges and no negative cycles (so shortest paths are well-defined). Suppose for the below questions that our implementation of Dijkstra uses red-black trees (and not Fibonacci heaps).
+	
+	If $m=n^{1.5}$, and we want to find the shortest path between some $u$ and $v$ which algorithm should we use? We prefer algorithms with the smallest worst-case runtime.
+	\Choices{
+		\Choice{Dijkstra}
+		\Choice*{Bellman-Ford}
+		\Choice{Floyd-Warshall}
+		\Choice{Two or more of the above algorithms are correct and have the smallest worst-case runtime.}
+	}
+	What if all the edges have nonnegative weight?
+	\Choices{
+		\Choice*{Dijkstra}
+		\Choice{Bellman-Ford}
+		\Choice{Floyd-Warshall}
+		\Choice{Two or more of the above algorithms are correct and have the smallest worst-case runtime.}
+	}
+	Suppose that we have a graph with $m=n^{1.5}$ edges that all have nonnegative weights. Which algorithm should we use to find the shortest path between all pairs of vertices?
+	\Choices{
+		\Choice{$n^2$ runs of Dijkstra}
+		\Choice*{$n$ runs of Dijkstra}
+		\Choice{$n^2$ runs of Bellman-Ford}
+		\Choice{$n$ runs of Bellman-Ford}
+		\Choice{Floyd-Warshall}
+		\Choice{Two or more of the above algorithms are correct and have the smallest worst-case runtime.}
+	}
+	Suppose that we have a graph with $m=\Theta(n^2)$ edges that all have nonnegative weights. Which algorithm should we use to find the shortest path between all pairs of vertices?
+	\Choices{
+		\Choice{$n^2$ runs of Dijkstra}
+		\Choice{$n$ runs of Dijkstra}
+		\Choice{$n^2$ runs of Bellman-Ford}
+		\Choice{$n$ runs of Bellman-Ford}
+		\Choice*{Floyd-Warshall}
+		\Choice{Two or more of the above algorithms are correct and have the smallest worst-case runtime.}
+	}
+}

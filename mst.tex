@@ -1,0 +1,129 @@
+\documentclass{bamboo}
+
+\usepackage{nicematrix}
+\usetikzlibrary{cd}
+\Document{
+	\Title{Minimum Spanning Trees}
+	
+	\section{Parts of Minimum Spanning Tree}
+	For each of the following edges, determine whether it has to be necessarily part of some minimum spanning tree.
+	
+	The minimum edge coming out of a vertex is
+	\Choices{
+		\Choice*{always part of some MST.}
+		\Choice{not necessarily part of some MST.}
+	}
+	
+	An edge on the shortest path between two vertices is
+	\Choices{
+		\Choice{always part of some MST.}
+		\Choice*{not necessarily part of some MST.}
+	}
+	
+	The smallest edge going across a cut is
+	\Choices{
+		\Choice*{always part of some MST.}
+		\Choice{not necessarily part of some MST.}
+	}
+    
+	\section{Minimum Spanning Tree Example}
+    Consider the graph below: 
+    % https://q.uiver.app/?q=WzAsNixbMCwxLCJcXGJ1bGxldHtBfSJdLFsxLDAsIlxcYnVsbGV0IHtCfSJdLFsxLDIsIlxcYnVsbGV0e0N9Il0sWzIsMCwiXFxidWxsZXR7RH0iXSxbMiwyLCJcXGJ1bGxldHtFfSJdLFszLDEsIlxcYnVsbGV0e0Z9Il0sWzAsMSwiNCIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMCwyLCI3IiwyLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIjEiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNCwiMyIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSwzLCI1IiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyLDQsIjIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzMsNSwiOCIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNCw1LCI2IiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+    %\[\begin{tikzcd}[ampersand replacement=\&]
+%	\& {\bullet {B}} \& {\bullet{D}} \\
+%	{\bullet{A}} \&\&\& {\bullet{F}} \\
+%	\& {\bullet{C}} \& {\bullet{E}}
+%	\arrow["4", no head, from=2-1, to=1-2]
+%	\arrow["7"', no head, from=2-1, to=3-2]
+%	\arrow["1", no head, from=1-2, to=3-2]
+%	\arrow["3", no head, from=1-3, to=3-3]
+%	\arrow["5", no head, from=1-2, to=1-3]
+%	\arrow["2", no head, from=3-2, to=3-3]
+%	\arrow["8", no head, from=1-3, to=2-4]
+%	\arrow["6", no head, from=3-3, to=2-4]
+%\end{tikzcd}\]
+
+    
+    \Tikz*{
+    	\begin{scope}[every node/.style={circle, draw=Black, line width=1, fill=LightGray, inner sep=3}]
+			\node (A) at (-3, 0) {$A$};
+			\node (B) at (-1, 1.5) {$B$};
+			\node (C) at (-1, -1.5) {$C$};
+			\node (D) at (1, 1.5) {$D$};
+			\node (E) at (1, -1.5) {$E$};
+			\node (F) at (3, 0) {$F$};
+			
+		\end{scope}
+		\foreach \u/\v/\w in {A/B/4, A/C/7, B/C/1, B/D/5, C/E/2, D/E/3, D/F/8, E/F/6}
+			\draw[line width=1] (\u) -- node[pos=0.5, fill=White] {$\w$} (\v);
+    }
+
+	What is the weight of the minimum spanning tree in this graph? 
+	\Freeform{16}
+
+    Assume we run Prim's algorithm on this graph to find the minimum spanning tree starting at vertex $A$.
+    
+    What is the weight of the first edge added? 
+    \Freeform{4}
+    What is the weight of the second edge added? 
+    \Freeform{1}
+    What is the weight of the third edge added? 
+    \Freeform{2}
+    What is the weight of the fourth edge added? 
+    \Freeform{3}
+    What is the weight of the fifth edge added? 
+    \Freeform{6}
+
+    Assume we run the Kruskal's algorithm on this graph to find the minimum spanning tree.
+    
+    What is the weight of the first edge added? 
+    \Freeform{1}
+    What is the weight of the second edge added? 
+    \Freeform{2}
+    What is the weight of the third edge added? 
+    \Freeform{3}
+    What is the weight of the fourth edge added? 
+    \Freeform{4}
+    What is the weight of the fifth edge added? 
+    \Freeform{6}
+
+    \section{Maximum Spanning Tree} 
+    Can we find the maximum spanning tree (instead of minimum) using the same Kruskal or Prim algorithms? 
+    \Choices{
+        \Choice {Yes, we can multiply the weights by $-1$ and run the minimum spanning tree algorithms.}
+        \Choice {Yes, we can modify both algorithms by choosing the edge with the greatest weight each time (instead of the edge with the least weight).}
+        \Choice*{Both of the above are correct.}
+        \Choice {No, we can't.}
+    }
+
+    Consider the graph from the previous problem. This time we want to find the maximum spanning tree.
+    
+    What is the weight of the maximum spanning tree in the graph? 
+	\Freeform{30}
+
+    Assume that we run Prim's algorithm on this graph to find the maximum spanning tree starting at vertex $A$.
+    
+    What is the weight of the first edge added? 
+    \Freeform{7}
+    What is the weight of the second edge added? 
+    \Freeform{4}
+    What is the weight of the third edge added? 
+    \Freeform{5}
+    What is the weight of the fourth edge added? 
+    \Freeform{8}
+    What is the weight of the fifth edge added? 
+    \Freeform{6}
+
+    Assume we run Kruskal's algorithm on this graph to find the maximum spanning tree.
+    
+    What is the weight of the first edge added? 
+    \Freeform{8}
+    What is the weight of the second edge added? 
+    \Freeform{7}
+    What is the weight of the third edge added? 
+    \Freeform{6}
+    What is the weight of the fourth edge added? 
+    \Freeform{5}
+    What is the weight of the fifth edge added? 
+    \Freeform{4}
+}

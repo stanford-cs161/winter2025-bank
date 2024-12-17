@@ -1,0 +1,32 @@
+\documentclass{bamboo}
+
+\Document{
+	\Title{Multiplication Algorithms}
+	
+	\section{Grade-school multiplication}
+	Suppose we multiply two $n$-digit integers $(x_1x_2\dots x_n)$ and $(y_1y_2\dots y_n)$ using the grade-school multiplication algorithm. How many pairs of digits $x_i$ and $y_j$ get multiplied in this algorithm?
+	\Choices{
+		\Choice{$n^3$}
+		\Choice{$2n-1$}
+		\Choice*{$n^2$}
+	}
+	What is the smallest exponent $x$ such that the number of one-digit operations in grade-school multiplication is always at most $10000\cdot n^x$?
+	\Freeform{2}
+	
+	\section{Divide-and-conquer multiplication}
+	Suppose that we have a divide-and-conquer algorithm $\mathcal{A}$ that multiplies two $n$-digit integers by recursively calling itself to perform $t$ number of $\ceil{n/2}$-digit integer multiplications; when $n\leq 1$, it performs single-digit multiplication.
+	
+	If $t=4$, what is the smallest exponent $x$ such that the number of one-digit multiplications is always at most $10000\cdot n^x$?
+	\Freeform{2}
+	
+	For what values of $t$ does the algorithm perform fewer one-digit multiplications than the grade-school multiplication algorithm for inputs that have $n>10000$ digits?
+	\Choices{
+		\Choice{For all values of $t$}
+		\Choice{$t=1,2$}
+		\Choice*{$t=1,2,3$}
+		\Choice{$t=1,2,3,4$}
+	}
+	
+	What is the value of $t$ for Karatsuba integer multiplication algorithm?
+	\Freeform{3}
+}

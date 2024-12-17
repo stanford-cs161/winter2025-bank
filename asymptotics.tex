@@ -1,0 +1,56 @@
+\documentclass{bamboo}
+\Document{
+	\Title{Asymptotic Notation}
+	
+	\section{Definitions}
+	Which of the following is the correct English description of $f(n)=O(g(n))$?
+	\Choices{
+		\Choice{For every constant $c>0$, there is an $n_0$, such that for all $n\geq n_0$, we have $f(n)\leq c\cdot g(n)$.}
+		\Choice*{There is some $c>0$ and some $n_0$, such that for all $n\geq n_0$ we have $f(n)\leq c\cdot g(n)$.}
+		\Choice{For every $n_0$, there is some constant $c>0$ such that for all $n\geq n_0$ we have $f(n)\leq c\cdot g(n)$.}
+	}
+	Suppose that $g(n)>0$ for all integers $n$. Then is $f(n)=O(g(n))$ equivalent to the following simpler definition that avoids $n_0$? Note the implicit assumption that $f(n)$ and $g(n)$ are functions over nonnegative integers.
+	\[ \exists c>0: \forall n\; f(n)\leq c\cdot g(n) \]
+	\Choices{
+		\Choice*{Yes}
+		\Choice{No}
+	}
+	Suppose that $f(n)=O(g(n))$. Which of the following is implied by this fact?
+	\Choices{
+		\Choice*{$g(n)=\Omega(f(n))$}
+		\Choice{$g(n)=O(f(n))$}
+		\Choice{Both}
+		\Choice{Neither}
+	}
+	If $f(n)=O(g(n))$, is it true that $2^{f(n)}=O\parens*{2^{g(n)}}$?
+	\Choices{
+		\Choice{Yes}
+		\Choice*{No}
+	}
+	\section{Examples}
+	What is the smallest exponent $x$ such that
+	\[ n^2+n^3-n=O(n^x)? \]
+	\Freeform{3}
+	Which of the following describes $n(n+1)(n+2)/6$?
+	\Choices{
+		\Choice{$O(n^4)$}
+		\Choice{$O(n^3)$}
+		\Choice{$\Theta(n^3)$}
+		\Choice{$\Omega(n^2)$}
+		\Choice*{All of the above}
+	}
+	For which exponents $x$ is $n(n+1)/2=\Theta(n^x)$?
+	\Choices{
+		\Choice{$1$}
+		\Choice*{$2$}
+		\Choice{$3$}
+		\Choice{All of the above}
+	}
+	For which function $g(n)$ is it true that $n^2=O(g(n))$?
+	\Choices{
+		\Choice*{$g(n)=1.01^n$}
+		\Choice{$g(n)=2^n\cdot \sin(\pi n/2)$}
+		\Choice{$g(n)=2^n\cdot \cos(\pi n/2)$}
+		\Choice{All of the above}
+	}
+}

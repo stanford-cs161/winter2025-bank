@@ -1,0 +1,142 @@
+\documentclass{bamboo}
+
+\usepackage{nicematrix}
+\Document{
+	\Title{Dynamic Programming II}
+    
+	\section{Longest Common Subsequence Forensics}
+	We are computing the longest common subsequence between two strings of length four $S=X_1X_2X_3X_4$ and $T=Y_1Y_2Y_3Y_4$. We fill the array $C$ where $C_{i,j}$ is the length of the longest common subsequence between the prefix of length $i$ from $S$ and the prefix of length $j$ from $T$. The array $C$ can be found below with some entries masked:
+	\[
+		\begin{bNiceMatrix}[first-row,first-col]
+			  & 0 & 1 & 2 & 3 & 4\\
+			0 & 0 & 0 & 0 & 0 & 0\\
+			1 & 0 & 0 & 0 & 0 & 1\\
+			2 & 0 & 0 & 0 & 1 & 1\\
+			3 & 0 & 0 & 1 & 1 & \heartsuit\\
+			4 & 0 & 1 & \clubsuit & \spadesuit & \diamondsuit \\
+		\end{bNiceMatrix}
+	\]
+	What can be said about $X_1$ and $Y_4$?
+	\Choices{
+		\Choice*{They are equal.}
+		\Choice{They are different.}
+		\Choice{They could be equal or different.}
+	}
+	What can be said about $X_2$ and $Y_3$?
+	\Choices{
+		\Choice*{They are equal.}
+		\Choice{They are different.}
+		\Choice{They could be equal or different.}
+	}
+	What can be said about $X_2$ and $Y_4$?
+	\Choices{
+		\Choice{They are equal.}
+		\Choice*{They are different.}
+		\Choice{They could be equal or different.}
+	}
+	What is the value of $\heartsuit$?
+	\Choices{
+		\Choice{0}
+		\Choice*{1}
+		\Choice{2}
+		\Choice{3}
+		\Choice{4}
+		\Choice{Multiple answers could be correct.}
+	}
+	What is the value of $\spadesuit$?
+	\Choices{
+		\Choice{0}
+		\Choice*{1}
+		\Choice{2}
+		\Choice{3}
+		\Choice{4}
+		\Choice{Multiple answers could be correct.}
+	}
+	What is the value of $\clubsuit$?
+	\Choices{
+		\Choice{0}
+		\Choice*{1}
+		\Choice{2}
+		\Choice{3}
+		\Choice{4}
+		\Choice{Multiple answers could be correct.}
+	}
+	What is the value of $\diamondsuit$?
+	\Choices{
+		\Choice{0}
+		\Choice*{1}
+		\Choice{2}
+		\Choice{3}
+		\Choice{4}
+		\Choice{Multiple answers could be correct.}
+	}
+	Suppose that in some (possibly different) instance of the longest common subsequence problem, we have $C_{i,j}=C_{i-1,j-1}+1$. Does that necessarily mean the $i$-th character of the first string and the $j$-th character of the second string are equal?
+	\Choices{
+		\Choice{Yes}
+		\Choice*{No}
+	}
+	\section{LCS Space Complexity}
+    Consider the LCS problem from lecture $13$ and our dynamic programming algorithm for it. 
+    Given input stings of lengths $m$ and $n$, what is the memory complexity of this algorithm?
+    \Choices{
+		\Choice{$O(n + m)$}
+		\Choice{$O((n + m)^2)$}
+		\Choice*{$O(mn)$}
+	}
+
+    When we are filling up the $i$-th row of our dynamic programming table $C$, what rows do we need to have access to? 
+    \Choices{
+        \Choice{We need to access all the $n$ rows.}
+        \Choice{We need to access the first $i$ rows.}
+		\Choice*{We need to access the values in the $i$-th row and $(i-1)$-th row.}
+	}
+
+    Given the observation above can we optimize our space Complexity further?
+    \Choices{
+        \Choice{No, the best memory Complexity is $O(nm)$}
+        \Choice{Yes we can reduce the memory complexity to $O(n\log(m))$.}
+		\Choice{Yes we can reduce the memory complexity to $O(\frac{m}{n})$.}
+		\Choice*{Yes we can reduce the memory complexity to $O(\min(m, n))$.}
+	}
+	\section{Knapsack Forensics}
+	Suppose we are trying to solve an instance of the unbounded knapsack problem. We fill the array $K$ whose entry $K_i$ gives us the maximum value we can obtain from a knapsack of capacity $i$.
+	\[ \begin{bNiceMatrix}[first-row]
+		0 & 1 & 2 & 3 & 4 & 5 & 6\\
+		0 & 0 & 1 & 3 & \spadesuit & \heartsuit & \diamondsuit \\
+ 	\end{bNiceMatrix}\]
+ 	What is the minimum possible value for $\spadesuit$?
+ 	\Freeform{3}
+ 	What is the minimum possible value for $\heartsuit$?
+ 	\Freeform{4}
+ 	What is the minimum possible value for $\diamondsuit$?
+ 	\Freeform{6}
+ 	If we fill a knapsack of capacity $3$ optimally, how many items do we put in the knapsack?
+ 	\Choices{
+ 		\Choice{0}
+ 		\Choice*{1}
+ 		\Choice{2}
+ 		\Choice{3}
+ 		\Choice{Multiple answers could be correct.}
+ 	}
+ 	
+ 	\section{Maximum Independent Set on a Tree} 
+    Consider the maximum independent on trees problem from the lecture $13$ slides. 
+    We saw a top-down dynamic programming approach to solve this problem.
+    Now we'd like to see how a bottom up approach to solve MIS on a tree would look like.  
+    Which one of the following statements is correct? 
+
+    \Choices{
+		\Choice{In order to solve this problem bottom-up we need to order the vertices by increasing DFS finish time.}
+		\Choice{In order to solve this problem bottom-up we need to order the vertices by decreasing DFS start time.}
+		\Choice*{Both of the above.}
+        \Choice {Any ordering would work.}
+
+	}
+
+    What is the best run-time for the bottom-up approach to solve the MIS on a tree problem? 
+    \Choices{
+		\Choice*{$O(n + m)$}
+		\Choice{$O((n + m)\log(n))$}
+		\Choice{$O((n + m)^2)$}
+	}
+}

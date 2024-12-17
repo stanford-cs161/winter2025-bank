@@ -1,0 +1,32 @@
+\documentclass{bamboo}
+
+\Document{
+	\Title{Selection}
+    In the select algorithm, the runtime is represented with the recurrence relation \[T(n)=O(n)+T\parens*{\frac{n}{5}}+T\parens*{\frac{7n}{10}}.\]
+    Here, $T(\frac{n}{5})$ is for selecting the pivot, and $T(\frac{7n}{10})$ is for the recursive call to select the $k$-th element.
+    
+    Consider the modified version of the select algorithm, where we split our array into $\ceil{\frac{n}{7}}$ groups of size $\leq 7$ instead. What would be the recurrence relation for this modified version? Specifically, if we write the recurrence relation as  $T(n)=O(n)+T(\frac{n}{a})+T(\frac{bn}{c})$, where $a$, $b$, and $c$ are non-negative integers, what are the smallest possible values of $a$, $b$, and $c$?
+    
+    $a =$ \Freeform{7}
+    $b =$ \Freeform{5}
+    $c =$ \Freeform{7}
+	What is the smallest exponent $x$ such that the modified version of the select described above on an array of size $n$ always takes time $O(n^x)$?
+    \Freeform{1}
+	Now assume that the $O(n)$ work per recursive step takes exactly $n$ units of time on our machine. In other words, suppose that the recurrence relation for the runtime is
+	\[ T(n)=n+T\parens*{\frac{n}{a}}+T\parens*{\frac{bn}{c}}. \]
+	What is the smallest coefficient $C$ such that we can use the substitution method to prove that the recurrence relation for the modified select algorithm is $T(n) \leq Cn$
+    \Freeform{7}
+    
+    Now consider another modified version of the select algorithm, where we split our array into $\ceil{n/3}$ groups of size $\leq 3$ instead. What would be the recurrence relation for this modified version?  Specifically, if we write the recurrence relation as  \[T(n)=n+T\parens*{\frac{n}{a}}+T\parens*{\frac{bn}{c}},\] where $a$, $b$, and $c$ are non-negative integers, what are the smallest possible values of $a$, $b$, and $c$? 
+    
+    $a =$ \Freeform{3}
+    $b =$ \Freeform{2}
+    $c =$ \Freeform{3}
+    Which one is true for the modified select recurrence relation that you came up with in the last part?
+    \Choices{
+        \Choice{$T(n) = \Theta(n)$}
+        \Choice*{$T(n) = \Theta(n\log n)$}
+        \Choice{$T(n) = \Theta(n^2)$}
+    }
+
+}

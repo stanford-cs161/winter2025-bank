@@ -1,0 +1,117 @@
+\documentclass{bamboo}
+
+\DeclareColor{\Red}{128, 38, 30}
+
+\tikzset{Red/.style={fill=Red, text=White}}
+\tikzset{Black/.style={fill=Black, text=White}}
+
+\Document{
+	\Title{Binary Search Trees}
+	
+	\section{Definitions}
+	Suppose that the nodes $A, B, C$ in a binary search tree are arranged as follows.
+	\Tikz*[every node/.style={shape=rectangle, rounded corners, align=center, draw=Black, line width=1}, line width=1]{
+		\node {$A$}
+			child { node {$B$} }
+			child { node {$C$} };
+	}
+	Which of the following describes the relationship between $A, B, C$?
+	\Choices{
+		\Choice{$A\leq B, C$}
+		\Choice{$A\geq B, C$}
+		\Choice{$A\leq B\leq C$}
+		\Choice*{$B\leq A\leq C$}
+	}
+	Now suppose that nodes $A, B, C$ are arranged as follows in the binary search tree.
+	\Tikz*[every node/.style={shape=rectangle, rounded corners, align=center, draw=Black, line width=1}, line width=1]{
+		\node {$A$}
+			child {
+				node {$B$}
+					child[missing] {}
+					child { node {$C$} }
+			}
+			child[missing] {};
+	}
+	What is the relationship between $A, B, C$?
+	\Choices{
+		\Choice{$B\leq A\leq C$}
+		\Choice*{$B\leq C\leq A$}
+		\Choice{$C\leq B\leq A$}
+		\Choice{$C\leq A\leq B$}
+	}
+	If two different binary search trees contain the same set of values, which of the following is common between them?
+	\Choices{
+		\Choice{Their pre-order traversals.}
+		\Choice*{Their in-order traversals.}
+		\Choice{Their post-order traversals.}
+		\Choice{Their root nodes.}
+	}
+	Which of the following describes the height of a binary search tree on $n$ nodes?
+	\Choices{
+		\Choice{$O(\log n)$}
+		\Choice*{$\Omega(\log n)$}
+		\Choice{$\Theta(\log n)$}
+		\Choice{All of the above.}
+	}
+	\section{Red-Black Trees}
+	Is the following a valid red-black tree? We are not drawing the implicit NIL nodes.
+	\Tikz*[every node/.style={shape=rectangle, rounded corners, align=center, draw=Black, line width=1}, line width=1]{
+		\node[Red] {$2$}
+			child { node[Black] {$1$} }
+			child { node[Black] {$3$} };
+	}
+	\Choices{
+		\Choice{Yes}
+		\Choice*{No}
+	}
+	Is the following a valid red-black tree?
+	\Tikz*[every node/.style={shape=rectangle, rounded corners, align=center, draw=Black, line width=1}, line width=1]{
+		\node[Black] {$1$}
+			child { node[Black] {$2$} }
+			child { node[Black] {$3$} };
+	}
+	\Choices{
+		\Choice{Yes}
+		\Choice*{No}
+	}
+	Is the following a valid red-black tree?
+	\Tikz*[every node/.style={shape=rectangle, rounded corners, align=center, draw=Black, line width=1}, line width=1]{
+		\node[Black] {$4$}
+			child { node[Red] {$2$} 
+				child { node[Black] {$1$} }
+				child { node[Black] {$3$} }
+			}
+			child { node[Black] {$5$} 
+			};
+	}
+	\Choices{
+		\Choice*{Yes}
+		\Choice{No}
+	}
+	Which of the following describes the height of a red-black tree on $n$ nodes?
+	\Choices{
+		\Choice{$O(\log n)$}
+		\Choice{$\Omega(\log n)$}
+		\Choice{$\Theta(\log n)$}
+		\Choice*{All of the above.}
+	}
+	If the length of a path from the root of a red-black tree to one of the leaf NIL nodes is $100$, what could be the length of another path from the root to some other NIL node?
+	\Choices{
+		\Choice{$45$}
+		\Choice*{$180$}
+		\Choice{$30$}
+		\Choice{All of the above.}
+	}
+	Suppose that $r$ is the root of a red-black tree on $n$ nodes. Assume all nodes have distinct values. If we sort the values stored in the tree to get $x_1< x_2< \dots < x_n$, and find the index $i$ where $r=x_i$, what can be said about $i$?
+	\Choices{
+		\Choice{$i\geq \Omega(n)$}
+		\Choice*{$i\geq \Omega(\sqrt{n})$}
+		\Choice{$i\leq 0.99 n$}
+	}
+	What is the worst-case runtime of operations INSERT/DELETE/SEARCH on a red-black tree storing $n$ nodes?
+	\Choices{
+		\Choice{$\Theta(n)$}
+		\Choice{$\Theta(\sqrt{n})$}
+		\Choice*{$\Theta(\log n)$}
+	}
+}

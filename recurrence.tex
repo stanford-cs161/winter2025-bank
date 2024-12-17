@@ -1,0 +1,70 @@
+\documentclass{bamboo}
+
+\Document{
+	\Title{Recurrence Relations}
+	\section{Recursion trees}
+    Consider the recurrence relation $T(n) = 5T(\frac{n}{4}) + 2n$\\
+	What is the number of problems in level $4$? (We use the convention that the root problem of size $n$ is on level $0$.)
+	\Choices{
+		\Choice{$1024$}
+		\Choice{$125$}
+		\Choice*{$625$}
+		\Choice{$4096$}
+	}
+	What is the size of each problem in level $5$? 
+	\Choices{
+		\Choice{$\frac{n}{512}$}
+		\Choice{$\frac{n}{3125}$}
+		\Choice*{$\frac{n}{1024}$}
+		\Choice{$\frac{n}{625}$}
+	}
+	What is the total contribution in level $i$?
+	\Choices{
+		\Choice{$(\frac{4}{5})^i\times 2n$}
+		\Choice*{$(\frac{5}{4})^i\times 2n$}
+		\Choice{$(\frac{4}{5})^{(i - 1)}\times 2n$}
+		\Choice{$(\frac{5}{4})^{(i - 1)}\times 2n$}
+	}
+	Which one is true for $T(n)$? 
+	\Choices{
+		\Choice{$T(n) = \Theta(n^{\log_{4}5})$}
+		\Choice{$T(n) = O(n^2)$}
+		\Choice{$T(n) = \Omega(n)$}
+		\Choice*{All of the above!}
+	}
+	\section{The master theorem} 
+	Remember that the master theorem applies to recurrences of the form
+	\[T(n)=a\cdot T\parens*{\frac{n}{b}}+O(n^d).\]
+	
+	Consider the recurrence relation $T(n) = 3T(\frac{n}{81}) + 10\sqrt{\sqrt{n}}$.
+	What are the values of the parameters $a, b, d$? Write fractional values in the form of $0.x$ or $0.xx$.
+	
+	$a=$ \Freeform{3}
+	
+	$b=$ \Freeform{81}
+	
+	$d=$ \Freeform{0.25}
+	
+	Which one is true for $T(n)$? 
+	\Choices{
+		\Choice{$T(n) = \Omega(n)$}
+		\Choice{$T(n) = \Theta(n^2)$}
+		\Choice*{$T(n) = \Omega(\log(n)\sqrt{\sqrt{n}})$}
+	}
+	
+	\section{The substitution method} 
+	Consider the recurrence relation $T(n) = 2T(n/2) + 3T(n/3) + n^2$. Which one is the smallest valid bound for $T(n)$?
+	\Choices{
+		\Choice{$T(n) = O(n)$}
+		\Choice*{$T(n) = O(n^2)$}
+		\Choice{$T(n) = O(n^3)$}
+	}
+	Which one would be the best guess to substitute $T(n)$ with if we wanted to prove the above bound? (Which bound would be provable by induction as in the substitution method and is the tightest such bound.)
+	\Choices{
+		\Choice{$T(n) \leq 12n$}
+		\Choice{$T(n) \leq n^3$}
+		\Choice*{$T(n) \leq 6n^2$}
+		\Choice{$T(n) \leq 2n^2$}
+	}
+	
+}

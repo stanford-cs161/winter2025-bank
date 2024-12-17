@@ -1,0 +1,180 @@
+\documentclass{bamboo}
+
+\usetikzlibrary{cd}
+\Document{
+	\Title{Stable Matching}
+	
+	\section{Deferred Acceptance Algorithm}
+	Which of the following are possible in a stable matching instance with $n$ doctors and $n$ hospitals.
+    
+   In the deferred acceptance algorithm, a doctor might get matched with the same hospital twice.
+    \Choices{
+        \Choice{Possible}
+        \Choice*{Impossible}
+    }
+
+  In the deferred acceptance algorithm, a doctor might get matched to all the $n$ hospitals at least once.
+    \Choices{
+        \Choice*{Possible}
+        \Choice{Impossible}
+    }
+
+    A doctor-optimal matching might be a hospital-optimal matching as well. 
+    \Choices{
+        \Choice*{Possible}
+        \Choice{Impossible}
+    }
+    
+    There might be a setting of hospitals' and doctors' preferences where no stable matching exists.
+    \Choices{
+        \Choice{Possible}
+        \Choice*{Impossible}
+    }
+
+	\section{Stable Matching Example}
+   	Consider the following graph where $A, B, C, D, E$ are doctors and  $1, 2, 3, 4, 5$ are hospitals. The preferences are listed next to each node from most preferred on the left to the least preferred on the right. 
+   	\Tikz*{
+   		\begin{scope}[every node/.style={circle, draw=Black, line width=1, fill=LightGray, inner sep=3}]
+			\node[label=left:{$[E,D,C,B,A]$}] (n1) at (-2, 2) {$1$};
+			\node[label=left:{$[B,A,C,D,E]$}] (n2) at (-2, 1) {$2$};
+			\node[label=left:{$[E,B,A,C,D]$}] (n3) at (-2, 0) {$3$};
+			\node[label=left:{$[A,B,C,D,E]$}] (n4) at (-2, -1) {$4$};
+			\node[label=left:{$[B,A,E,C,D]$}] (n5) at (-2, -2) {$5$};
+			\node[label=right:{$[1,2,3,4,5]$}] (nA) at (2, 2) {$A$};
+			\node[label=right:{$[4,5,3,1,2]$}] (nB) at (2, 1) {$B$};
+			\node[label=right:{$[1,2,3,5,4]$}] (nC) at (2, 0) {$C$};
+			\node[label=right:{$[4,2,3,5,1]$}] (nD) at (2, -1) {$D$};
+			\node[label=right:{$[1,4,5,2,3]$}] (nE) at (2, -2) {$E$};
+		\end{scope}
+		\foreach \u/\v in {1/A, 2/B, 3/C, 4/D, 5/E}
+			\draw[line width=1] (n\u) -- (n\v);
+   	}
+   % https://q.uiver.app/?q=WzAsMTAsWzAsMCwiezEgOiBbRSxELEMsQixBXX1cXGJ1bGxldCJdLFswLDEsInsyIDogW0IsIEEsQywgRCwgRV19XFxidWxsZXQiXSxbMCwyLCJ7MyA6W0UsIEIsIEEsIEMsIEQgXX1cXGJ1bGxldCJdLFswLDMsIns0IDogW0EsIEIsIEMsIEQsIEVdfVxcYnVsbGV0Il0sWzAsNCwiezUgOiBbQiwgQSwgRSwgQywgRF19XFxidWxsZXQiXSxbMiwxLCJcXGJ1bGxldHtCOiBbNCwgNSwgMywgMSwgMl19Il0sWzIsMiwiXFxidWxsZXR7QyA6IFsxLCAyLCAzLCA1LCA0XX0iXSxbMiwzLCJcXGJ1bGxldHtEIDogWzQsIDIsIDMsIDUsIDFdfSJdLFsyLDQsIlxcYnVsbGV0e0UgOiBbMSwgNCwgNSwgMiwgM119Il0sWzIsMCwiXFxidWxsZXR7QSA6IFsxLCAyLCAzLCA0LCA1XX0iXSxbMCw5LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEsNSwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsyLDYsIiIsMCx7InN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMyw3LCIiLDAseyJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzQsOCwiIiwwLHsic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
+%\[\begin{tikzcd}[ampersand replacement=\&]
+%	{{1 : [E,D,C,B,A]}\bullet} \&\& {\bullet{A : [1, 2, 3, 4, 5]}} \\
+%	{{2 : [B, A,C, D, E]}\bullet} \&\& {\bullet{B: [4, 5, 3, 1, 2]}} \\
+%	{{3 :[E, B, A, C, D ]}\bullet} \&\& {\bullet{C : [1, 2, 3, 5, 4]}} \\
+%	{{4 : [A, B, C, D, E]}\bullet} \&\& {\bullet{D : [4, 2, 3, 5, 1]}} \\
+%	{{5 : [B, A, E, C, D]}\bullet} \&\& {\bullet{E : [1, 4, 5, 2, 3]}}
+%	\arrow[no head, from=1-1, to=1-3]
+%	\arrow[no head, from=2-1, to=2-3]
+%	\arrow[no head, from=3-1, to=3-3]
+%	\arrow[no head, from=4-1, to=4-3]
+%	\arrow[no head, from=5-1, to=5-3]
+%\end{tikzcd}\]
+	
+	How many blocking pairs are there in the given matching? 
+    \Freeform{6}
+
+    What is the doctor optimal matching?
+    
+    $A$'s match: 
+    \Freeform{2}
+    $B$'s match:
+    \Freeform{4}
+    $C$'s match:
+    \Freeform{3}
+    $D$'s match:
+    \Freeform{5}
+    $E$'s match:
+    \Freeform{1}
+
+    What is the hospital optimal matching?
+    
+    $A$'s match: 
+    \Freeform{2}
+    $B$'s match:
+    \Freeform{4}
+    $C$'s match:
+    \Freeform{3}
+    $D$'s match:
+    \Freeform{5}
+    $E$'s match:
+    \Freeform{1}
+
+    Are there other stable matchings (different from what we've found) in this example?
+    \Choices{
+        \Choice{Yes}
+        \Choice*{No}
+    }
+
+    Now consider the following example (no matching specified). Similar to the last example $A, B, C, D, E$ are doctors and $1, 2, 3, 4, 5$ are hospitals. 
+
+	\Tikz*{
+   		\begin{scope}[every node/.style={circle, draw=Black, line width=1, fill=LightGray, inner sep=3}]
+			\node[label=left:{$[A,B,C,D,E]$}] (n1) at (-2, 2) {$1$};
+			\node[label=left:{$[B,C,D,E,A]$}] (n2) at (-2, 1) {$2$};
+			\node[label=left:{$[C,D,E,A,B]$}] (n3) at (-2, 0) {$3$};
+			\node[label=left:{$[D,E,A,B,C]$}] (n4) at (-2, -1) {$4$};
+			\node[label=left:{$[E,A,B,C,D]$}] (n5) at (-2, -2) {$5$};
+			\node[label=right:{$[3,4,5,1,2]$}] (nA) at (2, 2) {$A$};
+			\node[label=right:{$[4,5,1,2,3]$}] (nB) at (2, 1) {$B$};
+			\node[label=right:{$[2,3,5,4,1]$}] (nC) at (2, 0) {$C$};
+			\node[label=right:{$[5,1,2,3,4]$}] (nD) at (2, -1) {$D$};
+			\node[label=right:{$[1,2,3,4,5]$}] (nE) at (2, -2) {$E$};
+		\end{scope}
+   	}
+    % https://q.uiver.app/?q=WzAsMTAsWzAsMCwiezEgOiBbQSwgQiwgQyxELEVdfVxcYnVsbGV0Il0sWzAsMSwiezIgOiBbQiwgQywgRCwgRSwgQV19XFxidWxsZXQiXSxbMCwyLCJ7MyA6WyBDLCBELCBFLCBBLCBCIF19XFxidWxsZXQiXSxbMCwzLCJ7NCA6IFsgRCwgRSxBLCBCLCBDLF19XFxidWxsZXQiXSxbMCw0LCJ7NSA6IFtFLEEsQiwgQywgRF19XFxidWxsZXQiXSxbMiwxLCJcXGJ1bGxldHtCOiBbNCwgNSwgMSwgMiwzXX0iXSxbMiwyLCJcXGJ1bGxldHtDIDogWyAyLCAzLCA1LCA0LCAxXX0iXSxbMiwzLCJcXGJ1bGxldHtEIDogWzUsIDEsIDIsIDMsIDRdfSJdLFsyLDQsIlxcYnVsbGV0e0UgOiBbMSwyLCAzLCA0LCA1XX0iXSxbMiwwLCJcXGJ1bGxldHtBIDogWzMsIDQsIDUsIDEsIDJdfSJdXQ==
+%\[\begin{tikzcd}[ampersand replacement=\&]
+%	{{1 : [A, B, C,D,E]}\bullet} \&\& {\bullet{A : [3, 4, 5, 1, 2]}} \\
+%	{{2 : [B, C, D, E, A]}\bullet} \&\& {\bullet{B: [4, 5, 1, 2,3]}} \\
+%	{{3 :[ C, D, E, A, B ]}\bullet} \&\& {\bullet{C : [ 2, 3, 5, 4, 1]}} \\
+%	{{4 : [ D, E,A, B, C,]}\bullet} \&\& {\bullet{D : [5, 1, 2, 3, 4]}} \\
+%	{{5 : [E,A,B, C, D]}\bullet} \&\& {\bullet{E : [1,2, 3, 4, 5]}}
+%\end{tikzcd}\]
+
+    What is the doctor optimal matching?
+    
+    $A$'s match: 
+    \Freeform{3}
+    $B$'s match:
+    \Freeform{4}
+    $C$'s match:
+    \Freeform{2}
+    $D$'s match:
+    \Freeform{5}
+    $E$'s match:
+    \Freeform{1}
+
+    What is the hospital optimal matching?
+    
+    $A$'s match: 
+    \Freeform{1}
+    $B$'s match:
+    \Freeform{2}
+    $C$'s match:
+    \Freeform{3}
+    $D$'s match:
+    \Freeform{4}
+    $E$'s match:
+    \Freeform{5}
+
+    Are there other stable matchings (different from what we've found) in this example?
+    \Choices{
+        \Choice*{Yes}
+        \Choice{No}
+    }
+    
+    \section{Number of Stable Matchings}
+    Is there a polynomial-time algorithm that receives the list of preferences of doctors and hospitals and determines if the stable matching is \emph{unique} or if there are multiple stable matchings?
+    \Choices{
+    	\Choice*{Yes}
+        \Choice{No}
+    }
+    
+    Suppose that there are two states who want to run a joint doctor-hospital matching program. The first state has $n$ hospitals and $n$ doctors, and the second state has $m$ hospitals and $m$ doctors. Every doctor prefers all the in-state hospitals  to all the out-of-state hospitals, and similarly every hospital prefers in-state doctors to out-of-state doctors.
+    
+    Could there be a stable matching where a hospital and doctor from different states are matched?
+    \Choices{
+    	\Choice{Yes}
+        \Choice*{No}
+    }
+   	
+   	Suppose that in this two-state program, the doctor-optimal and hospital-optimal stable matchings are completely disjoint (no doctor-hospital pair is common between the two). What can be the total number of stable matchings that exist?
+   	\Choices{
+   		\Choice{2}
+   		\Choice{3}
+   		\Choice{11}
+   		\Choice*{None of the above.}
+   	}
+}

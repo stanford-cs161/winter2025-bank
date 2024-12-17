@@ -1,0 +1,32 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v3
+        - uses: xu-cheng/texlive-action/full@v1
+          with:
+            run: |
+                apk add make
+                for i in *.tex; do
+                make ${i%.tex}.svg
+                make ${i%.tex}.pdf
+                done
+                make publish
+        - uses: actions/configure-pages@v3
+        - uses: actions/upload-pages-artifact@v1
+          with:
+            path: ./public
+        - uses: actions/deploy-pages@v2
+          id: deployment

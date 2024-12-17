@@ -1,0 +1,80 @@
+\documentclass{bamboo}
+
+\usepackage{nicematrix}
+\Document{
+	\Title{Greedy Algorithms}
+	
+	\section{Activity Selection}
+	Suppose that we are given a list of intervals $[a_1,b_1], \dots, [a_n,b_n]$. We want to check if a new interval $[c, d]$ intersects any of the $[a_i, b_i]$ intervals. What is the smallest runtime for an algorithm to do this check?
+	\Choices{
+		\Choice{$O(1)$}
+		\Choice{$O(\log n)$}
+		\Choice*{$O(n)$}
+	}
+	Now suppose that all the $[a_i, b_i]$ intervals are \emph{disjoint} and further sorted, i.e., $a_{i+1}>b_i$ for all $i$. What is the smallest runtime for an algorithm to check if a new interval $[c, d]$ intersects any of the $[a_i, b_i]$?
+	\Choices{
+		\Choice{$O(1)$}
+		\Choice*{$O(\log n)$}
+		\Choice{$O(n)$}
+	}
+	What if we are further promised that $d\geq b_n$? What is the smallest runtime to find out if there is any intersection?
+	\Choices{
+		\Choice*{$O(1)$}
+		\Choice{$O(\log n)$}
+		\Choice{$O(n)$}
+	}
+	What is the runtime of the greedy algorithm for activity selection? Assume the input is given in an arbitrary order.
+	\Choices{
+		\Choice{$O(n)$}
+		\Choice*{$O(n \log n)$}
+		\Choice{$O(n^2)$}
+	}
+	In the activity selection problem, which of the following intervals are guaranteed to be part of some optimal solution?
+	\Choices{
+		\Choice{Shortest interval.}
+		\Choice*{Interval with largest start time.}
+		\Choice{Interval with smallest start time.}
+		\Choice{All of the above.}
+	}
+	\section{Task Scheduling}
+	Consider the task scheduling problem from lecture. Lucky and Plucky each have $n$ tasks they need to do, and they each have already computed an optimal ordering for their tasks. Not being satisfied with how Lucky haphazardly performs tasks, Plucky insists on taking over and doing all the $2n$ tasks themself. What is the optimal runtime of finding the new optimal ordering of the $2n$ tasks?
+	\Choices{
+		\Choice{$O(\log n)$}
+		\Choice*{$O(n)$}
+		\Choice{$O(n\log n)$}
+		\Choice{$O(n^2)$}
+	}
+	Suppose that in an instance of the task scheduling problem, there is a unique optimal solution. If we pick two of the jobs $A$ and $B$ (from the $n$ jobs in the input), then based on just the delay-costs and lengths of $A$ and $B$:
+	\Choices{
+		\Choice{We can tell whether $A$ and $B$ appear next to each other in the optimal solution.}
+		\Choice*{We can tell which of $A$ and $B$ appears earlier in the optimal solution.}
+	}
+	Suppose that we have the following instance of the task scheduling problem:
+	\[
+		\begin{bNiceMatrix}[first-row,first-col]
+			                  & A & B & C & D & E & F & G\\
+			\text{length}     & 1 & 1 & 2 & 2 & 3 & 4 & 4\\
+			\text{delay cost} & 1 & 2 & 2 & 4 & 3 & 1 & 2\\
+		\end{bNiceMatrix}
+	\]
+	How many different orderings of $A, B, \dots, G$ result in an optimal solution to task scheduling?
+	\Freeform{12}
+	\section{Huffman Coding}
+	Suppose that our alphabet consists of $n\geq 2$ letters, each appearing with nonzero frequency. In an optimal prefix-free coding, how large can the maximum length of a binary string assigned to the letters be?
+	\Choices{
+		\Choice{$O(\log n)$}
+		\Choice{$n/2$}
+		\Choice*{$n-1$}
+		\Choice{$n$}
+	}
+	Suppose that we have two letters $A$ and $B$, and we encode them as $10$ and $1$. Is this a prefix-free code?
+	\Choices{
+		\Choice{Yes}
+		\Choice*{No}
+	}
+	With this coding scheme, can there be an ambiguity in decoding some string of $0$s and $1$s?
+	\Choices{
+		\Choice{Yes}
+		\Choice*{No}
+	}
+}

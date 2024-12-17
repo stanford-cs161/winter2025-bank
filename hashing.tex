@@ -1,0 +1,104 @@
+\documentclass{bamboo}
+
+\Document{
+	\Title{Hashing}
+	\section{Hash tables}
+	Hash tables with universal hash families guarantee an expected runtime of $O(1)$ for the INSERT, SEARCH, and DELETE operations. What is the meaning of ``expected''?
+	\Choices{
+		\Choice{It is an average over the choices of the adversary who picks the elements in the table.}
+		\Choice*{It is an average over the choices of the algorithm who picks the hash function from the hash family.}
+	}
+	In order to conclude an expected runtime of $O(1)$ for hash table operations, we assumed the following two happen in some specific order:
+	\begin{itemize}
+		\item The adversary picks elements $x_1,\dots,x_n$ for the hash table.
+		\item The algorithm picks a hash function from the hash family.
+	\end{itemize}
+	In what order do these happen?
+	\Choices{
+		\Choice{Algorithm first, and then adversary.}
+		\Choice*{Adversary first, and then algorithm.}
+		\Choice{It does not matter.}
+	}
+	\section{Bit lengths}
+	Suppose that there is a toy box with $N$ toys in it. You have a label printer that can print arbitrary strings of $0$s and $1$s. If you produce labels for the $N$ toys in such a way that each toy gets a unique label, what can be said about the longest label's length?
+	\Choices{
+		\Choice*{$\geq \Omega(\log N)$}
+		\Choice{$\leq O(N)$}
+		\Choice{$\geq \Omega(N)$}
+	}
+	As a remark, for any labeling scheme, the same lower bound of $\Omega(\log N)$ applies even to the average label length, not just the longest label length.
+	
+	If you produce labels in a way that minimizes the longest label's length, what is this minimum?
+	\Choices{
+		\Choice{$\Theta(N)$}
+		\Choice{$\Theta(1)$}
+		\Choice*{$\Theta(\log N)$}
+	}
+	If our toy box consists of all functions from $\set{0,\dots, M-1}$ to $\set{0,\dots, n-1}$, what is the minimum longest label's length?
+	\Choices{
+		\Choice{$\Theta(Mn)$}
+		\Choice{$\Theta(M)$}
+		\Choice*{$\Theta(M\log n)$}
+		\Choice{$\Theta(n\log M)$}
+	}
+	\section{Modular arithmetic}
+	Suppose that $M>1000$ (the universe size) is a prime number. If we pick $a\in \set{1,\dots, M-1}$ and $b\in \set{0,\dots,M-1}$, independently and uniformly at random, what is
+	\[ \P_{a, b}{a\times 12+b=34 \pmod M \text{ and }a\times 56+b=78 \pmod M}? \]
+	\Choices{
+		\Choice*{$\frac{1}{M(M-1)}$}
+		\Choice{$\frac{1}{M}$}
+		\Choice{$\frac{1}{M^2}$}
+		\Choice{$0$}
+	}
+	How about 
+	\[ \P_{a, b}{a\times 12+b=34 \pmod M \text{ and }a\times 56+b=34 \pmod M}? \]
+	\Choices{
+		\Choice{$\frac{1}{M(M-1)}$}
+		\Choice{$\frac{1}{M}$}
+		\Choice{$\frac{1}{M^2}$}
+		\Choice*{$0$}
+	}
+	In fact for any pair of distinct elements $x, y$ in the universe, $u=a\times x+b \mod M$ and $v=a\times y+b \mod M$ are uniformly distributed amongst all distinct pairs.
+	
+	How many elements of $\set{0,\dots,M-1}$ are equal to $0$ modulo $n$?
+	\Choices{
+		\Choice*{$\ceil{M/n}$}
+		\Choice{$\floor{M/n}$}
+		\Choice{$\floor{M/n}+1$}
+	}
+	In fact, for any $i$, the number of elements from $\set{0,\dots,M-1}$ equal to $i$ modulo $n$ is $\leq \ceil{M/n}$.
+	
+	
+	Let $u=0$; pick $v$ uniformly at random from $\set{0,\dots,M-1}-\set{u}=\set{1,\dots,M-1}$. What is the chance that $v=u \pmod n$?
+	\Choices{
+		\Choice*{$\frac{\ceil{M/n}-1}{M-1}$}
+		\Choice{$\frac{1}{M-1}$}
+		\Choice{$\frac{n}{M-1}$}
+	}
+	You can verify that the answer above is always $\leq 1/n$. The same answer holds as an upper bound if we changed $u$ from $0$ to any other element in $\set{0,\dots,M-1}$.
+	\section{Hash family size}
+	Suppose that we have a universe of size $M$, and our hash table size is $n$. If $n\geq M$, what is the minimum size of a universal hash family?
+	\Freeform{1}
+	Suppose now that $M=n^{100}$ and we have a nonempty hash family $H$. Let $h^*$ be one of the hash functions in $H$. Since $M>n$, $h^*$ must map at least two distinct elements $x^*,y^*$ in the universe to the same bucket (by the pigeonhole principle). What can be said about
+	\[ \P_{h\sim H}{h(x^*)=h(y^*)}? \]
+	\Choices{
+		\Choice{$=0$}
+		\Choice*{$\geq 1/\card{H}$}
+		\Choice{$\leq 1/n$}
+	}
+	This means that if $H$ is universal, then
+	\[ 1/n\geq \P_{h\sim H}{h(x^*)=h(y^*)} \geq 1/\card{H}, \]
+	or in other words $\card{H}\geq n$. What can be said about the minimum longest $0/1$ label length for labeling this hash family?
+	\Choices{
+		\Choice{$\geq \Omega(\log n)$}
+		\Choice{$\geq \Omega(\log M)$}
+		\Choice*{Both of the above.}
+	}
+	For the universal hash family from lecture, how many bits do we need to label the hash functions, if we minimize the longest label's length?
+	\Choices{
+		\Choice{$\Theta(M)$}
+		\Choice*{$\Theta(\log M)$}
+		\Choice{$\Theta(1)$}
+	}
+	This shows the hash family from lecture can be labeled by the optimal number of bits ($\Theta(\log M)=\Theta(\log n)$) when $M=n^{100}$.
+}

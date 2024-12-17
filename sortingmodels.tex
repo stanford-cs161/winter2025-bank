@@ -1,0 +1,77 @@
+\documentclass{bamboo}
+
+\Document{
+	\Title{Sorting Models}
+    \section{3-Wise Comparisons} 
+    Assume you have a function called 3-sort that takes as input an array of size $3$ of comparable objects and returns them in 
+    sorted order. You want to sort an array of size $n \geq 3$ objects only using calls to 3-sort. How many function calls of 3-sort are
+     required to sort an array of size n? Choose the asymptotically largest applicable lower bound.
+    \Choices {
+        \Choice{$\Omega(\log n)$}
+        \Choice{$\Omega(\sqrt{n})$}
+        \Choice{$\Omega(n)$}
+        \Choice*{$\Omega(n\log n)$}
+    }
+    %-----
+    \section{Possible or Impossible}
+	Is it possible to implement the following algorithms or data structures? 
+
+
+   A data structure that stores comparable objects and supports the following operations:
+   \begin{itemize}
+   	\item Insert new objects in $O(1)$ time per insertion.
+   	\item Remove objects in $O(1)$ time per removal.
+   	\item Return the smallest object currently in the collection in $O(1)$ time.
+   \end{itemize}
+   Is it possible to implement such a data structure?
+   \Choices {
+       \Choice{Possible}
+       \Choice*{Impossible}
+   }
+   %-----
+    An algorithm that runs in $O(n)$ time and takes an array $A$ of size $n$ of comparable objects, $i$, and $j$ ($1\leq i < j\leq n$) as inputs and returns all the elements that are greater than the $i$th smallest element in $A$ and less than the $j$th smallest element in $A$? 
+    \Choices {
+        \Choice*{Possible}
+        \Choice{Impossible}
+    }
+    Which algorithm would be a good choice to use for the last part? 
+    \Choices{
+        \Choice*{$k$-Select}
+        \Choice{Radix Sort}
+        \Choice{Quick Sort}
+        \Choice{Merge Sort}
+    }
+    %------
+    An algorithm that runs in $O(n)$ time and takes an array $A$ of size $n$ of comparable objects and partitions $A$ into 
+    $\frac{n}{\log n}$ groups of size  $\log n$ each, where for every $i<j$, members of group $i$ are smaller than or equal to members of group $j$.
+    \Choices {
+        \Choice{Possible}
+        \Choice*{Impossible}
+    }
+
+    \section{Radix Sort and Counting Sort}
+
+    Assume you have an array $A$ of size $n$ with positive integer element with all elements in the range $[1, n^3)$.
+    
+    What is the runtime of Counting Sort run on $A$? 
+    \Choices {
+        \Choice{$\Theta(n)$}
+        \Choice{$\Theta(n\log n)$}
+        \Choice{$\Theta(n^2)$}
+        \Choice*{$\Theta(n^3)$}
+    }
+    What is the runtime of Radix Sort, using base $10$,  run on $A$? 
+    \Choices {
+        \Choice{$\Theta(n)$}
+        \Choice*{$\Theta(n\log n)$}
+        \Choice{$\Theta(n^2)$}
+        \Choice{$\Theta(n^3)$}
+    }
+    Which base for Radix Sort will result in the fastest Radix Sort algorithm to sort $A$ with?
+    \Choices {
+        \Choice{$2$}
+        \Choice{$10$}
+        \Choice*{$n$}
+        \Choice{$n^2$}
+    }
+}

@@ -1,0 +1,97 @@
+\documentclass{bamboo}
+
+\usetikzlibrary{chains}
+\tikzset{style0/.style={draw=Black}}
+\tikzset{style1/.style={draw=Orange, fill=LightOrange}}
+\DeclareDocumentCommand{\Array}{m}{
+	\Tikz*{
+		\begin{scope}[start chain=going right, node distance=1pt]
+		\foreach \u/\v in {#1} {
+			\node[on chain, line width=1pt, rounded corners, style\v] {\u};
+		}
+		\end{scope}
+	}
+}
+
+\Document{
+	\Title{Sorting Algorithms}
+	\section{Insertion sort example}
+	Suppose that we want to sort the following array according to the alphabetical order using Insertion Sort.
+	\Array{C/0, A/0, B/0}
+	In the first iteration, Insertion Sort starts moving $C$. Where does $C$ end up after this iteration?
+	\Array{C/1, A/0, B/0}
+	\Choices{
+		\Choice*{Position 1}
+		\Choice{Position 2}
+		\Choice{Position 3}
+	}
+	Now we start moving $A$. Where does $A$ end up after we are done with this iteration?
+	\Array{C/0, A/1, B/0}
+	\Choices{
+		\Choice*{Position 1}
+		\Choice{Position 2}
+		\Choice{Position 3}
+	}
+	In the next iteration, we move $B$. Where does it end up?
+	\Array{A/0, C/0, B/1}
+	\Choices{
+		\Choice{Position 1}
+		\Choice*{Position 2}
+		\Choice{Position 3}
+	}
+	The final array looks as follows.
+	\Array{A/0, B/0, C/0}
+	
+	\section{Insertion sort questions}
+	Can you see a pattern? When sorting an array using Insertion Sort, which of the following is correct after having iterated over the first $i$ items.
+	\Choices{
+		\Choice{Item $i$ is in its final position and will never move again.}
+		\Choice*{The first $i$ items are in sorted order.}
+		\Choice{The first $i$ items are in their final positions.}
+		\Choice{All of the above.}
+	}
+	What is the smallest exponent $x$ such that Insertion Sort on an array of size $n$ always takes time $O(n^x)$?
+	\Freeform{2}
+	What if we run insertion sort on an already-sorted array. What is the smallest exponent $x$ such that Insertion Sort on a sorted array takes time $O(n^x)$?
+	\Freeform{1}
+	Which of the following describes the worst case runtime of Insertion Sort?
+	\Choices{
+		\Choice{$O(n^2)$}
+		\Choice{$\Omega(n^2)$}
+		\Choice{$\Omega(n)$}
+		\Choice*{All of the above}
+	}
+	\section{Merge sort}
+	The Merge operation takes two arrays $A$ and $B$ of size $n$ which are already sorted and outputs the union of the two in sorted order. What is the smallest bound on the runtime of the Merge algorithm?
+	\Choices{
+		\Choice{$O(n\log n)$}
+		\Choice*{$O(n)$}
+		\Choice{$O(n^2)$}
+	}
+	In Merge Sort run on array of size $n$, how many calls (in total across all levels of recursion) are made to the Merge subroutine?
+	\Choices{
+		\Choice*{$\Theta(n)$}
+		\Choice{$\Theta(n\log n)$}
+		\Choice{$\Theta(\log n)$}
+	}
+	Is Merge Sort faster than Insertion Sort on all input arrays?
+	\Choices{
+		\Choice{Yes}
+		\Choice*{No}
+	}
+	Is Merge Sort faster than Insertion Sort on some arrays?
+	\Choices{
+		\Choice*{Yes}
+		\Choice{No}
+	}
+	If algorithm $\mathcal{A}$ is faster than algorithm $\mathcal{B}$ on some inputs, does that mean $\mathcal{A}$'s worst case runtime is better than $\mathcal{B}$'s worst case runtime?
+	\Choices{
+		\Choice{Yes}
+		\Choice*{No}
+	}
+	Is Merge Sort's worst case runtime asymptotically faster than Insertion Sort's worst case runtime?
+	\Choices{
+		\Choice*{Yes}
+		\Choice{No}
+	}
+}
